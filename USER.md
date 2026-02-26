@@ -12,6 +12,8 @@ _Learn about the person you're helping. Update this as you go._
   - 시스템 안정성(Stable) 최우선
   - 시스템 설정값이 민감한 경우 임의 변경 금지, 변경 전 반드시 확인
   - OpenClaw가 WSL에 설치된 환경이므로, Windows 작업은 무조건 WSL에서 `powershell.exe`(pwsh) 호출 방식으로 수행
+  - 토큰/인증값은 CLI 출력 마스킹값이 아니라 `~/.openclaw/openclaw.json`에서 직접 읽어 사용
+  - 중요한 운영 규칙/자동화 변경사항은 JSON 파일과 스킬 프롬프트(워크스페이스 기준)에 수시로 저장·수정·정리
 
 ## Context
 
