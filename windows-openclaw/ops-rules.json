@@ -1,0 +1,15 @@
+{
+  "windowsExecution": {
+    "preferredInvoker": "psw",
+    "pattern": "psw \"<PowerShell command>\"",
+    "examples": [
+      "psw \"Get-Date\"",
+      "psw \"Get-Process | Select -First 3\"",
+      "psw \"Start-Process notepad\""
+    ],
+    "notes": [
+      "Always execute Windows actions through pwsh invocation from WSL.",
+      "Prefer one-line command strings for reproducibility and logs."
+    ]
+  }
+}

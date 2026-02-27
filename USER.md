@@ -17,6 +17,7 @@ _Learn about the person you're helping. Update this as you go._
   - 앞으로 Gemini CLI를 작업 전반에 적극 활용 (요약/초안/분석/자동화 보조)
   - OpenClaw 모델 타임아웃/실패 시 보조 경로로 Windows Gemini CLI(wsl→pwsh) 즉시 사용
   - Windows 패키지/도구 설치·업데이트는 Chocolatey를 우선 경로로 적극 활용
+  - Windows 작업 명령은 `psw "<명령어>"` 패턴으로 통일하여 실행 (예: `psw "Get-Date"`, `psw "Get-Process | Select -First 3"`, `psw "Start-Process notepad"`)
 
 ## Context
 
