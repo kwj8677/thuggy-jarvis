@@ -183,7 +183,13 @@ $rc = $LASTEXITCODE
 if ($rc -ne 0) {
   try {
     $errTail = (cmd.exe /c 'wsl bash -lc "tail -n 30 /tmp/openclaw/watchdog-restart.err 2>/dev/null"' | Out-String).Trim()
-    if ($errTail) { Write-Log ("restart_stderr=" + $errTail.Replace("`n",' | ')) }
+    if ($errTail) {
+      Write-Log ("restart_stderr=" + $errTail.Replace("`n",' | '))
+      $el = $errTail.ToLowerInvariant()
+      if ($el -match 'token mismatch|unauthorized|token missing') { $class = [pscustomobject]@{ kind='auth_mismatch'; evidence='restart stderr token/unauthorized' } }
+      elseif ($el -match 'already running|port 18789 is already in use|lock timeout') { $class = [pscustomobject]@{ kind='port_or_lock_conflict'; evidence='restart stderr port/lock conflict' } }
+      elseif ($el -match 'command not found|not recognized|no such file|permission denied') { $class = [pscustomobject]@{ kind='runtime_exec_failure'; evidence='restart stderr command/permission failure' } }
+    }
   } catch {}
 }
 
