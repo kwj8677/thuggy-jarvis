@@ -14,6 +14,9 @@ _Learn about the person you're helping. Update this as you go._
   - OpenClaw가 WSL에 설치된 환경이므로, Windows 작업은 무조건 WSL에서 `powershell.exe`(pwsh) 호출 방식으로 수행
   - 토큰/인증값은 CLI 출력 마스킹값이 아니라 `~/.openclaw/openclaw.json`에서 직접 읽어 사용
   - 중요한 운영 규칙/자동화 변경사항은 JSON 파일과 스킬 프롬프트(워크스페이스 기준)에 수시로 저장·수정·정리
+  - 앞으로 Gemini CLI를 작업 전반에 적극 활용 (요약/초안/분석/자동화 보조)
+  - OpenClaw 모델 타임아웃/실패 시 보조 경로로 Windows Gemini CLI(wsl→pwsh) 즉시 사용
+  - Windows 패키지/도구 설치·업데이트는 Chocolatey를 우선 경로로 적극 활용
 
 ## Context
 
