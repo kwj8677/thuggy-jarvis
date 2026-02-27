@@ -177,8 +177,15 @@ if ($decision.action -eq 'skip') {
 }
 
 Write-Log "health=fail action=restart start class=$($class.kind)"
-cmd.exe /c 'wsl bash -lc "timeout 25s openclaw gateway restart >/tmp/openclaw/watchdog-restart.log 2>&1"' | Out-Null
+$restartCmd = 'wsl bash -lc "timeout 25s openclaw gateway restart >/tmp/openclaw/watchdog-restart.log 2>/tmp/openclaw/watchdog-restart.err"'
+cmd.exe /c $restartCmd | Out-Null
 $rc = $LASTEXITCODE
+if ($rc -ne 0) {
+  try {
+    $errTail = (cmd.exe /c 'wsl bash -lc "tail -n 30 /tmp/openclaw/watchdog-restart.err 2>/dev/null"' | Out-String).Trim()
+    if ($errTail) { Write-Log ("restart_stderr=" + $errTail.Replace("`n",' | ')) }
+  } catch {}
+}
 
 # post-restart probe check
 Start-Sleep -Seconds 2
