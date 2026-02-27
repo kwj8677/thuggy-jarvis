@@ -55,8 +55,21 @@ if ($rc -eq 0) {
   try {
     $tail = (Get-Content $logFile -Tail 20) -join "`n"
     $prompt = "OpenClaw watchdog 최근 로그를 2줄로 요약: `n$tail"
-    & 'C:\Users\humil\AppData\Roaming\npm\gemini.ps1' -p $prompt --output-format text 2>$null | Out-File -FilePath (Join-Path $logDir 'oc_watchdog_gemini.log') -Encoding utf8
-  } catch {}
+    if ($env:GEMINI_API_KEY -and -not [string]::IsNullOrWhiteSpace($env:GEMINI_API_KEY)) {
+      Set-Location 'C:\Users\humil'
+      $geminiOut = & 'C:\Users\humil\AppData\Roaming\npm\gemini.ps1' -p $prompt --output-format text 2>$null
+      if ($LASTEXITCODE -eq 0 -and $geminiOut) {
+        $geminiOut | Out-File -FilePath (Join-Path $logDir 'oc_watchdog_gemini.log') -Encoding utf8
+        Write-Log 'gemini=ok'
+      } else {
+        Write-Log "gemini=skip rc=$LASTEXITCODE"
+      }
+    } else {
+      Write-Log 'gemini=skip reason=no_api_key'
+    }
+  } catch {
+    Write-Log ("gemini=fail err=" + $_.Exception.Message)
+  }
 
   exit 0
 }
