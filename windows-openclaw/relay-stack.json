@@ -1,0 +1,24 @@
+{
+  "mode": "self-healing-relay-stack",
+  "chromeProfile": {
+    "userDataDir": "C:\\openclaw\\chrome-profile",
+    "startUrl": "https://www.naver.com/",
+    "assumePinnedRelay": true
+  },
+  "attachStrategies": [
+    "uia_if_available",
+    "image_roi_search",
+    "window_relative_offsets"
+  ],
+  "offsetCandidates": [
+    [145, 48], [120, 48], [95, 48], [170, 48], [145, 62], [120, 62], [95, 62]
+  ],
+  "retries": {
+    "rounds": 3,
+    "sleepMs": 400
+  },
+  "logs": {
+    "dir": "C:\\openclaw\\logs",
+    "attachTrace": "C:\\openclaw\\logs\\relay-attach-trace.log"
+  }
+}
