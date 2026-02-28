@@ -1,1 +1,3 @@
 .openclaw/
+secrets/local-secrets.json
+secrets/*.local.json
