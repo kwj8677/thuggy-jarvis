@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "layers": {
+    "sessionRaw": "memory/sessions/<session-id>.md",
+    "daily": "memory/YYYY-MM-DD.md",
+    "curated": "MEMORY.md"
+  },
+  "writePolicy": {
+    "oneTurnOneRecord": true,
+    "allowedTypes": ["decision", "change", "failure"],
+    "appendOnlySessionRaw": true,
+    "dailyMaxLinesPerRollup": 5
+  },
+  "separation": {
+    "experimentalValuesToJson": true,
+    "jsonTargets": ["windows-openclaw/relay-calibration.json"]
+  },
+  "deprecation": {
+    "failureThreshold": 3,
+    "markAs": "deprecated"
+  },
+  "fallback": {
+    "onRoutingAmbiguous": "memory/sessions/inbox.md"
+  }
+}
