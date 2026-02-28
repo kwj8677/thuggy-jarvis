@@ -41,5 +41,13 @@
       "approval-gate",
       "meta-json-log"
     ]
+  },
+  "secretsPolicy": {
+    "sourceOfTruth": "secrets/local-secrets.json",
+    "rules": [
+      "Do not rely on memory for secrets.",
+      "Read secrets from local-secrets.json before auth-sensitive operations.",
+      "Commit only secrets.example.json, never real secrets."
+    ]
   }
 }

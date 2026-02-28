@@ -20,6 +20,8 @@ _Learn about the person you're helping. Update this as you go._
   - Windows 패키지/도구 설치·업데이트는 Chocolatey를 우선 경로로 적극 활용
   - Windows 작업 명령은 `psw "<명령어>"` 패턴으로 통일하여 실행 (예: `psw "Get-Date"`, `psw "Get-Process | Select -First 3"`, `psw "Start-Process notepad"`)
   - GUI 자동화는 AHK(v2)+`C:\openclaw\run.ps1` 액션 체계를 우선 사용하고, 브라우저는 Relay 우선
+  - 모든 주요 시크릿(API 키/토큰/IP)은 `secrets/local-secrets.json`에 로컬 저장하고, 작업 시 해당 JSON을 우선 참조한다
+  - 시크릿은 기억에 의존하지 않고 파일(`secrets/local-secrets.json`)을 단일 진실원(SoT)으로 사용한다
 
 ## Context
 
