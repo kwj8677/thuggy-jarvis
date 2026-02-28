@@ -1,4 +1,5 @@
 {
+{
   "windowsExecution": {
     "preferredInvoker": "psw",
     "pattern": "psw \"<PowerShell command>\"",
@@ -9,7 +10,36 @@
     ],
     "notes": [
       "Always execute Windows actions through pwsh invocation from WSL.",
-      "Prefer one-line command strings for reproducibility and logs."
+      "Prefer one-line command strings for reproducibility and logs.",
+      "Prioritize stability/availability over strict hardening when trade-offs exist; confirm before high-risk changes."
+    ],
+    "priority": {
+      "stability": "highest",
+      "security": "important_but_secondary"
+    }
+  },
+  "guiAutomation": {
+    "engine": "AutoHotkey v2",
+    "installer": "psw \"choco install autohotkey -y\"",
+    "runner": "psw \"& C:\\openclaw\\run.ps1 -Action <name>.ahk -TimeoutSec <n>\"",
+    "validatedAction": "notepad_type.ahk",
+    "lastValidation": {
+      "result": "ok",
+      "exitCode": 0,
+      "runId": "20260228-133244-notepad_type"
+    }
+  },
+  "actionRunner": {
+    "path": "C:\\openclaw\\run.ps1",
+    "policy": "C:\\openclaw\\action-policy.json",
+    "logs": "C:\\openclaw\\logs",
+    "features": [
+      "timeout",
+      "retry",
+      "backoff",
+      "risk-level",
+      "approval-gate",
+      "meta-json-log"
     ]
   }
 }

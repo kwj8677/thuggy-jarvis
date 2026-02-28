@@ -1,0 +1,14 @@
+{
+  "title": "Windows Automation Quickstart (WSL OpenClaw)",
+  "invoke": "psw",
+  "steps": [
+    "psw \"Get-Date\"",
+    "psw \"choco install autohotkey -y\"",
+    "psw \"& C:\\openclaw\\run.ps1 -Action system_health.ps1 -TimeoutSec 30\"",
+    "psw \"& C:\\openclaw\\run.ps1 -Action notepad_type.ahk -TimeoutSec 30\""
+  ],
+  "logPaths": [
+    "C:\\openclaw\\logs",
+    "C:\\temp\\openclaw-ops"
+  ]
+}
