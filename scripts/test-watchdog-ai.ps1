@@ -1,5 +1,7 @@
 $ErrorActionPreference = 'Stop'
-$env:GEMINI_API_KEY = 'AIzaSyAEjATJ1jXmUdfTyqBNJBp1WPXj2bnbu9M'
+if (-not $env:GEMINI_API_KEY -or [string]::IsNullOrWhiteSpace($env:GEMINI_API_KEY)) {
+  throw 'GEMINI_API_KEY is required in environment.'
+}
 
 $aiTimeoutSec = 20
 $context = @"
