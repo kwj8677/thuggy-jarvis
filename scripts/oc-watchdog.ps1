@@ -132,7 +132,7 @@ function Save-IncidentReport($report) {
 }
 
 # Health check via WSL safe probe script (authoritative)
-$probeCmd = 'wsl bash -lc "/home/humil/.openclaw/workspace/scripts/openclaw-safe.sh probe >/dev/null 2>&1"'
+$probeCmd = 'wsl -d Ubuntu -u humil --exec bash -lc "/home/humil/.openclaw/workspace/scripts/openclaw-safe.sh probe >/dev/null 2>&1"'
 cmd.exe /c $probeCmd | Out-Null
 $ok = ($LASTEXITCODE -eq 0)
 
@@ -177,7 +177,7 @@ if ($decision.action -eq 'skip') {
 }
 
 Write-Log "health=fail action=restart start class=$($class.kind)"
-$restartCmd = 'wsl bash -lc "timeout 25s openclaw gateway restart >/tmp/openclaw/watchdog-restart.log 2>/tmp/openclaw/watchdog-restart.err"'
+$restartCmd = 'wsl -d Ubuntu -u humil --exec bash -lc "timeout 25s openclaw gateway restart >/tmp/openclaw/watchdog-restart.log 2>/tmp/openclaw/watchdog-restart.err"'
 cmd.exe /c $restartCmd | Out-Null
 $rc = $LASTEXITCODE
 if ($rc -ne 0) {

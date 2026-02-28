@@ -1,0 +1,30 @@
+{
+  "defaults": {
+    "timeoutSec": 60,
+    "maxRetries": 1,
+    "retryBackoffSec": 2,
+    "risk": "low",
+    "requiresApproval": false
+  },
+  "actions": {
+    "open_notepad.ps1": {
+      "timeoutSec": 20,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "notepad_type.ahk": {
+      "timeoutSec": 30,
+      "maxRetries": 1,
+      "retryBackoffSec": 2,
+      "risk": "medium",
+      "requiresApproval": false
+    },
+    "install_ahk.ps1": {
+      "timeoutSec": 600,
+      "maxRetries": 0,
+      "risk": "high",
+      "requiresApproval": true
+    }
+  }
+}

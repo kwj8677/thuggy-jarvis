@@ -1,1 +1,0 @@
-Write-Output "pong_from_windows_action"
