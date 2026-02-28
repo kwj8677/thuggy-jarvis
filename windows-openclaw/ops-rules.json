@@ -49,5 +49,17 @@
       "Read secrets from local-secrets.json before auth-sensitive operations.",
       "Commit only secrets.example.json, never real secrets."
     ]
+  },
+  "contextManagement": {
+    "userInterface": "single-thread-chat",
+    "internalRouting": "auto",
+    "domains": ["operations", "marketing", "experiments"],
+    "reporting": "merged-summary",
+    "requireUserTags": false,
+    "notes": [
+      "User should not need to manually tag context.",
+      "Agent auto-classifies intent and routes internally.",
+      "Results are returned in one coherent reply."
+    ]
   }
 }

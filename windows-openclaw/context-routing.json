@@ -1,0 +1,14 @@
+{
+  "mode": "single_chat_auto_route",
+  "enabled": true,
+  "domains": {
+    "operations": ["gateway", "relay", "wsl", "pwsh", "watchdog", "task"],
+    "marketing": ["handsos", "예약", "매출", "리뷰", "노출", "블로그", "인스타"],
+    "experiments": ["테스트", "실험", "시도", "benchmark", "A/B"]
+  },
+  "policy": {
+    "askForTag": false,
+    "mergeOutput": true,
+    "memoryShared": true
+  }
+}
