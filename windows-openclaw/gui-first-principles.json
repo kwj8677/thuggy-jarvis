@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "name": "first-principles-gui-automation",
+  "objective": "reproducible_state_transition",
+  "constraints": {
+    "interactiveSessionRequired": true,
+    "focusRequired": true,
+    "preferStableSelectors": true,
+    "evidenceRequired": true
+  },
+  "controlPriority": [
+    "browser_cdp_or_relay",
+    "windows_uia",
+    "ahk_fallback"
+  ],
+  "successGates": [
+    "action_executed",
+    "state_changed",
+    "evidence_logged"
+  ],
+  "executor": {
+    "windowsCommandPattern": "psw \"<command>\"",
+    "actionRunner": "C:\\openclaw\\run.ps1"
+  },
+  "orchestration": {
+    "engine": "python",
+    "features": [
+      "branching",
+      "retry_with_backoff",
+      "output_normalization",
+      "deterministic_recovery"
+    ]
+  },
+  "drivers": {
+    "browser": ["agent-browser", "relay"],
+    "winApp": ["powershell-uia"],
+    "fallback": ["autohotkey"]
+  },
+  "preflightChecklist": [
+    "interactive_session_confirmed",
+    "policy_permission_confirmed",
+    "target_window_active",
+    "auth_session_valid"
+  ],
+  "recoveryOrder": [
+    "retry_same_path",
+    "switch_to_uia",
+    "switch_to_ahk"
+  ],
+  "kpi": {
+    "targetConsecutiveSuccessRuns": 10
+  },
+  "failureTaxonomy": [
+    "session_isolation",
+    "focus_visibility",
+    "policy_block",
+    "auth_expiration_or_challenge",
+    "selector_drift",
+    "network_or_timing"
+  ]
+}
