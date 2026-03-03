@@ -1,0 +1,62 @@
+{
+  "version": "2026-03-04",
+  "goal": "Stable full-agent desktop/browser control with deterministic fallback and cleanup",
+  "defaultMode": "safe",
+  "modes": {
+    "fast": {
+      "description": "Low-latency path for known-stable flows",
+      "chain": ["browser-relay", "uia", "windows-control"],
+      "timeoutsSec": {"browser-relay": 25, "uia": 20, "windows-control": 20}
+    },
+    "safe": {
+      "description": "Max resilience path with all fallbacks",
+      "chain": ["browser-relay", "uia", "windows-control", "midscene", "ahk"],
+      "timeoutsSec": {"browser-relay": 30, "uia": 25, "windows-control": 25, "midscene": 40, "ahk": 20}
+    }
+  },
+  "routing": {
+    "web": "browser-relay",
+    "windowsNative": "uia",
+    "uiChangedOrSelectorBroken": "midscene",
+    "extremeFallback": "ahk"
+  },
+  "verification": {
+    "rule": "state_transition_and_evidence",
+    "minEvidenceCount": 2,
+    "signals": ["uia_state", "cdp_tabs_or_dom", "screenshot", "action_report_json"]
+  },
+  "relay": {
+    "attachCriteria": "okByTabs OR okByAttached",
+    "permissionFallback": ["relay_permission_grant_uia.ps1", "relay_permission_auto.ps1"],
+    "gateAction": "relay_tabs_gate.ps1"
+  },
+  "cleanup": {
+    "runAfterEachTask": true,
+    "closeChrome": true,
+    "closeExplorerFolderWindows": true,
+    "closeSystemSettings": true,
+    "preserveShell": true
+  },
+  "actions": {
+    "core": [
+      "session_gate.ps1",
+      "chrome_uia_pipeline.ps1",
+      "relay_icon_target_train_uia.ps1",
+      "relay_permission_auto.ps1",
+      "relay_tabs_gate.ps1",
+      "explorer_l2_pipeline_uia.ps1",
+      "settings_l3_pipeline_uia.ps1",
+      "uia_ahk_cross_train.ps1",
+      "uia_ahk_cross_train_windows.ps1"
+    ],
+    "archivePolicy": "Non-policy or duplicate actions are moved to archive-legacy-*"
+  },
+  "installedSkills": {
+    "windows-control": "~/.agents/skills/windows-control",
+    "desktop-control": "~/.agents/skills/desktop-control",
+    "skill-defender": "~/.agents/skills/skill-defender",
+    "find-skills": "~/.agents/skills/find-skills",
+    "desktop-computer-automation": "~/.agents/skills/desktop-computer-automation",
+    "chrome-bridge-automation": "~/.agents/skills/chrome-bridge-automation"
+  }
+}

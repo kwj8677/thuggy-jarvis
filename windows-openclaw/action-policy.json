@@ -25,6 +25,205 @@
       "maxRetries": 0,
       "risk": "high",
       "requiresApproval": true
+    },
+    "gui_preflight.ps1": {
+      "timeoutSec": 30,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "naver_write_verify.ps1": {
+      "timeoutSec": 30,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "auto_remediate_gui.ps1": {
+      "timeoutSec": 60,
+      "maxRetries": 0,
+      "risk": "medium",
+      "requiresApproval": false
+    },
+    "relay_bootstrap.ps1": {
+      "timeoutSec": 45,
+      "maxRetries": 1,
+      "retryBackoffSec": 3,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "session_gate.ps1": {
+      "timeoutSec": 20,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_tabs_gate.ps1": {
+      "timeoutSec": 20,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "notepad_l1_train.ahk": {
+      "timeoutSec": 35,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "notepad_l1_verify.ps1": {
+      "timeoutSec": 20,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "win_gui_l1_pipeline.ps1": {
+      "timeoutSec": 60,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "run_win_gui_l1_interactive.ps1": {
+      "timeoutSec": 40,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "notepad_l1_train_uia.ps1": {
+      "timeoutSec": 35,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "win_gui_l1_pipeline_uia.ps1": {
+      "timeoutSec": 60,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "run_win_gui_l1_uia_interactive.ps1": {
+      "timeoutSec": 40,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "chrome_visible_gate.ps1": {
+      "timeoutSec": 30,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "chrome_l1_launch_uia.ps1": {
+      "timeoutSec": 35,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "chrome_l1_verify_uia.ps1": {
+      "timeoutSec": 20,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "chrome_uia_pipeline.ps1": {
+      "timeoutSec": 60,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "run_chrome_uia_pipeline_interactive.ps1": {
+      "timeoutSec": 40,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "chrome_uia_deep_training.ps1": {
+      "timeoutSec": 600,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_attach_uia.ps1": {
+      "timeoutSec": 25,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_uia_pipeline.ps1": {
+      "timeoutSec": 120,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_uia_deep_training.ps1": {
+      "timeoutSec": 600,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "explorer_l2_train_uia.ps1": {
+      "timeoutSec": 40,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "explorer_l2_pipeline_uia.ps1": {
+      "timeoutSec": 60,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "settings_l3_train_uia.ps1": {
+      "timeoutSec": 50,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "settings_l3_pipeline_uia.ps1": {
+      "timeoutSec": 70,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_icon_target_train_uia.ps1": {
+      "timeoutSec": 35,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_permission_grant_uia.ps1": {
+      "timeoutSec": 45,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "relay_permission_auto.ps1": {
+      "timeoutSec": 80,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "uia_ahk_cross_train.ps1": {
+      "timeoutSec": 90,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "uia_ahk_cross_train_windows.ps1": {
+      "timeoutSec": 100,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "uia_ahk_cross_train_explorer.ps1": {
+      "timeoutSec": 100,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "uia_ahk_cross_train_settings.ps1": {
+      "timeoutSec": 100,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
     }
   }
 }
