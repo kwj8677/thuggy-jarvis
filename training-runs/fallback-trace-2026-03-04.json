@@ -1,0 +1,388 @@
+{
+  "generatedAt": "2026-03-04T04:03:35.127734",
+  "window": "all available logs",
+  "actionSummary": [
+    {
+      "action": "chrome_l1_launch_uia.ps1",
+      "total": 153,
+      "pass": 96,
+      "fail": 57,
+      "passRate": 0.627,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          55
+        ],
+        [
+          "timeout",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "chrome_l1_verify_uia.ps1",
+      "total": 96,
+      "pass": 67,
+      "fail": 29,
+      "passRate": 0.698,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          28
+        ],
+        [
+          "timeout",
+          1
+        ]
+      ]
+    },
+    {
+      "action": "chrome_uia_deep_training.ps1",
+      "total": 2,
+      "pass": 0,
+      "fail": 2,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "chrome_uia_pipeline.ps1",
+      "total": 126,
+      "pass": 46,
+      "fail": 80,
+      "passRate": 0.365,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          80
+        ]
+      ]
+    },
+    {
+      "action": "explorer_l2_pipeline_uia.ps1",
+      "total": 23,
+      "pass": 20,
+      "fail": 3,
+      "passRate": 0.87,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          3
+        ]
+      ]
+    },
+    {
+      "action": "explorer_l2_train_uia.ps1",
+      "total": 23,
+      "pass": 20,
+      "fail": 3,
+      "passRate": 0.87,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          3
+        ]
+      ]
+    },
+    {
+      "action": "relay_attach_train.ahk",
+      "total": 16,
+      "pass": 2,
+      "fail": 14,
+      "passRate": 0.125,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          13
+        ],
+        [
+          "timeout",
+          1
+        ]
+      ]
+    },
+    {
+      "action": "relay_attach_uia.ps1",
+      "total": 12,
+      "pass": 0,
+      "fail": 12,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          12
+        ]
+      ]
+    },
+    {
+      "action": "relay_bootstrap.ps1",
+      "total": 4,
+      "pass": 4,
+      "fail": 0,
+      "passRate": 1.0,
+      "topReasons": []
+    },
+    {
+      "action": "relay_calibrate_click.ahk",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "passRate": 1.0,
+      "topReasons": []
+    },
+    {
+      "action": "relay_capture_click.ahk",
+      "total": 5,
+      "pass": 3,
+      "fail": 2,
+      "passRate": 0.6,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "relay_click_fast.ahk",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "passRate": 1.0,
+      "topReasons": []
+    },
+    {
+      "action": "relay_click_or_verify.ps1",
+      "total": 20,
+      "pass": 18,
+      "fail": 2,
+      "passRate": 0.9,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "relay_click_window_offset.ahk",
+      "total": 59,
+      "pass": 40,
+      "fail": 19,
+      "passRate": 0.678,
+      "topReasons": [
+        [
+          "timeout",
+          19
+        ]
+      ]
+    },
+    {
+      "action": "relay_click_window_offset_safe.ahk",
+      "total": 46,
+      "pass": 46,
+      "fail": 0,
+      "passRate": 1.0,
+      "topReasons": []
+    },
+    {
+      "action": "relay_icon_imagesearch.ahk",
+      "total": 6,
+      "pass": 0,
+      "fail": 6,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          4
+        ],
+        [
+          "timeout",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "relay_icon_target_train_uia.ps1",
+      "total": 54,
+      "pass": 49,
+      "fail": 5,
+      "passRate": 0.907,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          5
+        ]
+      ]
+    },
+    {
+      "action": "relay_permission_auto.ps1",
+      "total": 6,
+      "pass": 0,
+      "fail": 6,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          4
+        ],
+        [
+          "timeout",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "relay_permission_grant_uia.ps1",
+      "total": 19,
+      "pass": 1,
+      "fail": 18,
+      "passRate": 0.053,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          15
+        ],
+        [
+          "timeout",
+          3
+        ]
+      ]
+    },
+    {
+      "action": "relay_smart_toggle.ahk",
+      "total": 3,
+      "pass": 0,
+      "fail": 3,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "timeout",
+          3
+        ]
+      ]
+    },
+    {
+      "action": "relay_tabs_gate.ps1",
+      "total": 49,
+      "pass": 18,
+      "fail": 31,
+      "passRate": 0.367,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          31
+        ]
+      ]
+    },
+    {
+      "action": "relay_uia_pipeline.ps1",
+      "total": 3,
+      "pass": 0,
+      "fail": 3,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          3
+        ]
+      ]
+    },
+    {
+      "action": "session_gate.ps1",
+      "total": 253,
+      "pass": 239,
+      "fail": 14,
+      "passRate": 0.945,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          14
+        ]
+      ]
+    },
+    {
+      "action": "settings_l3_pipeline_uia.ps1",
+      "total": 21,
+      "pass": 19,
+      "fail": 2,
+      "passRate": 0.905,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "settings_l3_train_uia.ps1",
+      "total": 21,
+      "pass": 19,
+      "fail": 2,
+      "passRate": 0.905,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          2
+        ]
+      ]
+    },
+    {
+      "action": "toggle_relay_icon.ahk",
+      "total": 3,
+      "pass": 2,
+      "fail": 1,
+      "passRate": 0.667,
+      "topReasons": [
+        [
+          "timeout",
+          1
+        ]
+      ]
+    },
+    {
+      "action": "uia_ahk_cross_train.ps1",
+      "total": 61,
+      "pass": 48,
+      "fail": 13,
+      "passRate": 0.787,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          13
+        ]
+      ]
+    },
+    {
+      "action": "uia_ahk_cross_train_explorer.ps1",
+      "total": 9,
+      "pass": 0,
+      "fail": 9,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "nonzero_exit",
+          9
+        ]
+      ]
+    },
+    {
+      "action": "uia_ahk_cross_train_settings.ps1",
+      "total": 9,
+      "pass": 0,
+      "fail": 9,
+      "passRate": 0.0,
+      "topReasons": [
+        [
+          "timeout",
+          9
+        ]
+      ]
+    }
+  ],
+  "sampleSize": 1104
+}

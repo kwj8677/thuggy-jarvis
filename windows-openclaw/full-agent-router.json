@@ -16,8 +16,9 @@
   },
   "routing": {
     "web": "browser-relay",
-    "windowsNative": "uia",
-    "uiChangedOrSelectorBroken": "midscene",
+    "windowsNativePriority": ["windows-control", "windows-uia-advanced"],
+    "fallbackOrder": ["midscene-computer-automation", "ahk"],
+    "uiChangedOrSelectorBroken": "midscene-computer-automation",
     "extremeFallback": "ahk"
   },
   "verification": {
@@ -48,6 +49,11 @@
       "settings_l3_pipeline_uia.ps1",
       "uia_ahk_cross_train.ps1",
       "uia_ahk_cross_train_windows.ps1"
+    ],
+    "windowsPriorityPolicy": [
+      "1) Try windows-control or windows-uia-advanced (UIA first)",
+      "2) Fallback to midscene-computer-automation",
+      "3) Fallback to AHK script force run"
     ],
     "archivePolicy": "Non-policy or duplicate actions are moved to archive-legacy-*"
   },
