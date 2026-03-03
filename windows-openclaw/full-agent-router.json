@@ -31,12 +31,39 @@
     "permissionFallback": ["relay_permission_grant_uia.ps1", "relay_permission_auto.ps1"],
     "gateAction": "relay_tabs_gate.ps1"
   },
+  "conversationAutonomy": {
+    "enabled": true,
+    "triggerStyle": "intent_based",
+    "autoExecuteOnNaturalRequests": true,
+    "requiresExplicitGo": false,
+    "silentProgress": true,
+    "reportOnlyOn": ["state_change", "blocker", "final_result"],
+    "autoFallback": true,
+    "fallbackLogFormat": "Fallback to [skill] because [reason]"
+  },
+  "relayPreflight": {
+    "requiredBeforeBrowserActions": true,
+    "check": "browser.tabs(profile=chrome)",
+    "onNoAttachedTab": "Fallback to browser-relay because no_attached_tab",
+    "blockUntilAttached": true
+  },
+  "stateSeparation": {
+    "trackUiActionSuccessSeparately": true,
+    "trackRelayConnectionSeparately": true,
+    "successRequiresBothForWebFlows": true
+  },
+  "cleanupPolicy": {
+    "allowChromeFullCloseOnlyAtFinalStep": true,
+    "preserveAttachedRelayTabDuringActiveFlow": true
+  },
   "cleanup": {
     "runAfterEachTask": true,
-    "closeChrome": true,
+    "closeChrome": false,
     "closeExplorerFolderWindows": true,
     "closeSystemSettings": true,
-    "preserveShell": true
+    "preserveShell": true,
+    "keepRelayAttachedTab": true,
+    "chromeCloseOnlyOnExplicitRequest": true
   },
   "actions": {
     "core": [

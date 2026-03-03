@@ -18,3 +18,8 @@ Examples:
 Never mark success on click only. Success requires:
 - state transition observed
 - at least 2 evidence artifacts (UIA/CDP/screenshot/report)
+
+## Cleanup Guard (relay stability)
+- Do NOT close Chrome automatically during active browser flows.
+- Keep the relay-attached tab alive unless user explicitly requests cleanup.
+- Allow full Chrome cleanup only at final step or explicit user command.
