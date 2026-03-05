@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "default": {
+      "window": "chrome",
+      "clickPoints": [],
+      "lastSuccess": null
+    }
+  }
+}

@@ -1,4 +1,12 @@
 #Requires AutoHotkey v2.0
+#SingleInstance Force
+#NoTrayIcon
+CoordMode("Mouse", "Screen")
+SetTimer(ForceExit, -8000)
+
+ForceExit(*) {
+    ExitApp(9)
+}
 
 logFile := "C:\openclaw\logs\relay-attach-trace.log"
 FileAppend("--- relay_attach_train start " A_Now " ---`n", logFile, "UTF-8")

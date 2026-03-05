@@ -1,0 +1,33 @@
+{
+  "chrome": {
+    "assumptions": {
+      "window": "maximized",
+      "dpiScale": 100,
+      "toolbarPinned": true
+    },
+    "searchRegion": {
+      "x1OffsetFromRight": 260,
+      "y1": 20,
+      "x2OffsetFromRight": 20,
+      "y2": 110
+    },
+    "iconCandidates": [
+      {"xOffsetFromRight": 235, "y": 90},
+      {"xOffsetFromRight": 220, "y": 90},
+      {"xOffsetFromRight": 235, "y": 74},
+      {"xOffsetFromRight": 205, "y": 74},
+      {"xOffsetFromRight": 250, "y": 74},
+      {"xOffsetFromRight": 205, "y": 90},
+      {"xOffsetFromRight": 250, "y": 90},
+      {"xOffsetFromRight": 145, "y": 48},
+      {"xOffsetFromRight": 120, "y": 48},
+      {"xOffsetFromRight": 95, "y": 48}
+    ],
+    "imagePath": "\\\\wsl.localhost\\Ubuntu\\home\\humil\\.openclaw\\media\\inbound\\file_13---2cd8b756-6548-4611-91e1-b5a9e0d2482b.jpg",
+    "imageVariation": 35,
+    "retry": {
+      "maxTries": 2,
+      "sleepMs": 350
+    }
+  }
+}

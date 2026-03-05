@@ -1,7 +1,7 @@
 {
-{
   "windowsExecution": {
     "preferredInvoker": "psw",
+    "complexInvoker": "fsw",
     "pattern": "psw \"<PowerShell command>\"",
     "examples": [
       "psw \"Get-Date\"",
@@ -19,14 +19,53 @@
     }
   },
   "guiAutomation": {
-    "engine": "AutoHotkey v2",
-    "installer": "psw \"choco install autohotkey -y\"",
-    "runner": "psw \"& C:\\openclaw\\run.ps1 -Action <name>.ahk -TimeoutSec <n>\"",
-    "validatedAction": "notepad_type.ahk",
-    "lastValidation": {
-      "result": "ok",
-      "exitCode": 0,
-      "runId": "20260228-133244-notepad_type"
+    "goal": "macos-like high-reliability GUI control on Windows",
+    "executionOrder": [
+      "browser_tool_or_agent_browser",
+      "powershell_uia",
+      "ahk_fallback"
+    ],
+    "web": {
+      "primary": "browser tool (profile=openclaw or chrome when relay tab is attached)",
+      "secondary": "agent-browser (ref-based click/type/snapshot)",
+      "verification": "browser tabs/snapshot change before declaring success"
+    },
+    "windowsNative": {
+      "primary": "PowerShell UI Automation (element-first)",
+      "fallback": "AHK relative coordinates/image search",
+      "preconditions": [
+        "target window active",
+        "window restored/maximized",
+        "DPI-aware offsets"
+      ]
+    },
+    "ahk": {
+      "engine": "AutoHotkey v2",
+      "installer": "psw \"choco install autohotkey -y\"",
+      "runner": "psw \"& C:\\openclaw\\run.ps1 -Action <name>.ahk -TimeoutSec <n>\"",
+      "scriptGuards": [
+        "#SingleInstance Force",
+        "#NoTrayIcon",
+        "hard timeout via SetTimer -> ExitApp(nonzero)"
+      ]
+    },
+    "validation": {
+      "required": true,
+      "signals": [
+        "browser tabs not empty (relay attach)",
+        "window/control state changed",
+        "expected output/file/process evidence"
+      ],
+      "rule": "click dispatched != success"
+    },
+    "learning": {
+      "calibrationFile": "C:\\openclaw\\relay-calibration.json",
+      "scoreFile": "C:\\openclaw\\relay-learn.json",
+      "policy": [
+        "promote successful points",
+        "deprioritize failed points",
+        "mark deprecated after >=3 repeated failures"
+      ]
     }
   },
   "actionRunner": {
@@ -53,7 +92,11 @@
   "contextManagement": {
     "userInterface": "single-thread-chat",
     "internalRouting": "auto",
-    "domains": ["operations", "marketing", "experiments"],
+    "domains": [
+      "operations",
+      "marketing",
+      "experiments"
+    ],
     "reporting": "merged-summary",
     "requireUserTags": false,
     "notes": [

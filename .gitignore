@@ -1,3 +1,10 @@
 .openclaw/
 secrets/local-secrets.json
 secrets/*.local.json
+
+# local runtime/memory artifacts (do not publish)
+memory/
+recovery/
+training-runs/
+tmp_skill_audit/
+*.broken

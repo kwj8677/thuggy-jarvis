@@ -6,4 +6,10 @@ if [[ $# -lt 1 ]]; then
   exit 2
 fi
 
-pwsh.exe -NoProfile -NonInteractive -Command "$1"
+if command -v pwsh.exe >/dev/null 2>&1; then
+  pwsh.exe -NoProfile -NonInteractive -Command "$1"
+elif command -v powershell.exe >/dev/null 2>&1; then
+  powershell.exe -NoProfile -NonInteractive -Command "$1"
+else
+  /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -Command "$1"
+fi

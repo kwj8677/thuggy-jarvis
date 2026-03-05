@@ -1,7 +1,8 @@
 {
   "mode": "self-healing-relay-stack",
   "chromeProfile": {
-    "userDataDir": "C:\\openclaw\\chrome-profile",
+    "userDataDir": "C:\\Users\\humil\\AppData\\Local\\Google\\Chrome\\User Data",
+    "profileDirectory": "Default",
     "startUrl": "https://www.naver.com/",
     "assumePinnedRelay": true
   },

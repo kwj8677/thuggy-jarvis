@@ -14,19 +14,16 @@ function Run-Action($name,$timeout){
   return $LASTEXITCODE
 }
 
-$uiaRc = Run-Action 'relay_permission_grant_uia.ps1' 60
+$uiaRc = Run-Action 'relay_permission_grant_uia.ps1' 12
 $wcRc = -1
 $wcTried = $false
 
-# Fallback to windows-control when UIA fails
+# Stage 2: one short windows-control attempt only
 if($uiaRc -ne 0){
   $wcTried = $true
   $py = '\\wsl.localhost\Ubuntu\home\humil\.agents\skills\windows-control\scripts\click_text.py'
   if(Test-Path $py){
-    # Try Korean/English allow labels in current active window first
-    py -3 $py '허용' | Out-Null
-    if($LASTEXITCODE -ne 0){ py -3 $py 'Allow' | Out-Null }
-    if($LASTEXITCODE -ne 0){ py -3 $py '항상 허용' | Out-Null }
+    py -3 $py '허용' 'Chrome' | Out-Null
     $wcRc = $LASTEXITCODE
   } else {
     $wcRc = 92
@@ -34,11 +31,20 @@ if($uiaRc -ne 0){
 }
 
 # Verify by relay gate (tabs or attached)
-$gateRc = Run-Action 'relay_tabs_gate.ps1' 45
+$gateRc = Run-Action 'relay_tabs_gate.ps1' 12
 $ok = ($gateRc -eq 0)
+$reason = 'ok'
+if(-not $ok){
+  if(($uiaRc -eq 183) -and (-not $wcTried -or $wcRc -ne 0)){
+    $reason = 'permission_popup_not_visible'
+  } else {
+    $reason = 'permission_click_failed'
+  }
+}
 
 $result = [pscustomobject]@{
   ok = $ok
+  reason = $reason
   runId = $runId
   timestamp = $now.ToString('o')
   checks = [pscustomobject]@{

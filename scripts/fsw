@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# First-principles Windows executor for WSL:
+# - Avoid quote-escaping hell by executing via temporary .ps1 file by default
+# - Keep psw for short one-liners; use fsw for complex commands/blocks
+#
+# Usage:
+#   fsw "Get-Date"
+#   fsw -c "Get-Process | Select -First 3"
+#   fsw <<'PS'
+#   $p = Get-Process chrome -ErrorAction SilentlyContinue |
+#     Where-Object { $_.MainWindowHandle -ne 0 }
+#   $p | Select Id,MainWindowHandle
+#   PS
+
+MAX_CHARS=${FSW_MAX_CHARS:-8000}
+OUT_DIR="/home/humil/.openclaw/workspace/memory/forensics/raw-output"
+mkdir -p "$OUT_DIR"
+
+emit_guarded_output() {
+  local out_file="$1"
+  local size
+  local lines
+  size=$(wc -c < "$out_file" || echo 0)
+  lines=$(wc -l < "$out_file" || echo 0)
+
+  if [[ "$size" -le "$MAX_CHARS" ]]; then
+    cat "$out_file"
+    return 0
+  fi
+
+  local ts
+  ts=$(date +%Y%m%d-%H%M%S)
+  local archived="$OUT_DIR/fsw-$ts.log"
+  mv "$out_file" "$archived"
+
+  echo "[fsw] output truncated (bytes=$size lines=$lines max=$MAX_CHARS)"
+  echo "[fsw] full output saved: $archived"
+  echo "--- head(25) ---"
+  head -n 25 "$archived" || true
+  echo "--- tail(25) ---"
+  tail -n 25 "$archived" || true
+  echo "--- summary(error/warn/fail/timeout) ---"
+  grep -Ei "error|warn|fail|timeout|exception" "$archived" | tail -n 25 || true
+}
+
+run_ps_capture() {
+  local mode="$1"; shift
+  local out
+  out=$(mktemp /tmp/fsw-out-XXXXXX.log)
+  local rc=0
+
+  if [[ "$mode" == "file" ]]; then
+    local win_ps1="$1"
+    if command -v pwsh.exe >/dev/null 2>&1; then
+      pwsh.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$win_ps1" >"$out" 2>&1 || rc=$?
+    elif command -v powershell.exe >/dev/null 2>&1; then
+      powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$win_ps1" >"$out" 2>&1 || rc=$?
+    else
+      /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$win_ps1" >"$out" 2>&1 || rc=$?
+    fi
+  else
+    local cmd="$1"
+    if command -v pwsh.exe >/dev/null 2>&1; then
+      pwsh.exe -NoProfile -NonInteractive -Command "$cmd" >"$out" 2>&1 || rc=$?
+    elif command -v powershell.exe >/dev/null 2>&1; then
+      powershell.exe -NoProfile -NonInteractive -Command "$cmd" >"$out" 2>&1 || rc=$?
+    else
+      /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -Command "$cmd" >"$out" 2>&1 || rc=$?
+    fi
+  fi
+
+  emit_guarded_output "$out"
+  rm -f "$out" 2>/dev/null || true
+  return $rc
+}
+
+run_file_mode() {
+  local tmp_ps1
+  tmp_ps1="$(mktemp /tmp/fsw-XXXXXX.ps1)"
+  cat > "$tmp_ps1"
+  local win_ps1
+  win_ps1="$(wslpath -w "$tmp_ps1")"
+
+  run_ps_capture file "$win_ps1"
+  local rc=$?
+  rm -f "$tmp_ps1"
+  return $rc
+}
+
+# Explicit -c mode
+if [[ "${1:-}" == "-c" ]]; then
+  shift
+  if [[ $# -lt 1 ]]; then
+    echo 'Usage: fsw -c "<PowerShell command>"' >&2
+    exit 2
+  fi
+  run_ps_capture command "$1"
+  exit $?
+fi
+
+# Arg mode (single command arg)
+if [[ $# -ge 1 ]]; then
+  # Use file mode even for arg to reduce escaping edge-cases
+  printf '%s\n' "$1" | run_file_mode
+  exit $?
+fi
+
+# Stdin script-block mode
+run_file_mode

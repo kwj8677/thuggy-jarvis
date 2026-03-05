@@ -1,6 +1,7 @@
 param(
   [Parameter(Mandatory=$true)][string]$Action,
   [string]$ActionArgs = "",
+  [string[]]$ActionArgsList,
   [int]$TimeoutSec = 0,
   [int]$MaxRetries = -1,
   [switch]$Approve
@@ -80,10 +81,32 @@ function Write-Meta($attempt,$rc,$result,[string]$reason='') {
   } | ConvertTo-Json -Depth 4 | Out-File -FilePath $metaLog -Encoding utf8
 }
 
+function Convert-ActionArgs {
+  param([string]$Args, [string[]]$List)
+  if ($List -and $List.Count -gt 0) { return $List }
+  if ([string]::IsNullOrWhiteSpace($Args)) { return @() }
+
+  # lightweight tokenizer supporting quoted segments
+  $tokens = @()
+  $current = ''
+  $inQuote = $false
+  foreach ($ch in $Args.ToCharArray()) {
+    if ($ch -eq '"') { $inQuote = -not $inQuote; continue }
+    if (-not $inQuote -and [char]::IsWhiteSpace($ch)) {
+      if ($current.Length -gt 0) { $tokens += $current; $current = '' }
+    } else {
+      $current += $ch
+    }
+  }
+  if ($current.Length -gt 0) { $tokens += $current }
+  return $tokens
+}
+
 function Run-PS1 {
-  param([string]$Path,[string]$Args,[int]$WaitSec,[string]$StdOut,[string]$StdErr)
-  $argLine = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File `"$Path`" $Args"
-  $p = Start-Process -FilePath "pwsh.exe" -ArgumentList $argLine -PassThru -WindowStyle Hidden -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr
+  param([string]$Path,[string]$Args,[string[]]$ArgsList,[int]$WaitSec,[string]$StdOut,[string]$StdErr)
+  $extra = Convert-ActionArgs -Args $Args -List $ArgsList
+  $argList = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File', $Path) + $extra
+  $p = Start-Process -FilePath 'pwsh.exe' -ArgumentList $argList -PassThru -WindowStyle Hidden -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr
   if (-not $p.WaitForExit($WaitSec * 1000)) {
     try { $p.Kill() } catch {}
     return 124
@@ -123,7 +146,7 @@ $rc = 1
 while ($attempt -le $MaxRetries) {
   $attempt++
   if ($ext -eq '.ps1') {
-    $rc = Run-PS1 -Path $actionPath -Args $ActionArgs -WaitSec $TimeoutSec -StdOut $log -StdErr $errLog
+    $rc = Run-PS1 -Path $actionPath -Args $ActionArgs -ArgsList $ActionArgsList -WaitSec $TimeoutSec -StdOut $log -StdErr $errLog
   } elseif ($ext -eq '.ahk') {
     $rc = Run-AHK -Path $actionPath -WaitSec $TimeoutSec -StdOut $log
   } else {

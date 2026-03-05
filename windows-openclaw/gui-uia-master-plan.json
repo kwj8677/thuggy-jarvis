@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "goal": "full_windows_gui_control_via_uia",
+  "principles": [
+    "first_principles",
+    "stable_over_fast",
+    "gate_first",
+    "state_change_verification"
+  ],
+  "chromeProfile": {
+    "userDataDir": "C:\\Users\\humil\\AppData\\Local\\Google\\Chrome\\User Data",
+    "profileDirectory": "Default",
+    "allowIsolatedProfiles": false
+  },
+  "trainingLadders": [
+    {
+      "name": "L1_notepad_uia",
+      "target": "notepad",
+      "successCriteria": ["session_gate_pass", "uia_editable_found", "state_changed"]
+    },
+    {
+      "name": "L2_explorer_uia",
+      "target": "file_explorer",
+      "successCriteria": ["address_bar_found", "path_changed", "window_state_verified"]
+    },
+    {
+      "name": "L3_settings_uia",
+      "target": "windows_settings",
+      "successCriteria": ["search_box_found", "navigation_result_verified"]
+    },
+    {
+      "name": "L4_chrome_uia",
+      "target": "chrome_default_profile",
+      "successCriteria": ["session_gate_pass", "chrome_uia_pipeline_pass", "control_report_saved"]
+    },
+    {
+      "name": "L5_relay_uia",
+      "target": "openclaw_relay_attach",
+      "successCriteria": ["relay_target_found", "invoke_success", "relay_tabs_gate_pass"]
+    }
+  ],
+  "kpi": {
+    "consecutivePassTarget": 10,
+    "reportPath": "C:\\openclaw\\logs"
+  }
+}

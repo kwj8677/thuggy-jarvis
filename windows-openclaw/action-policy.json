@@ -201,6 +201,24 @@
       "risk": "low",
       "requiresApproval": false
     },
+    "relay_force_site_access.ps1": {
+      "timeoutSec": 140,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "fallback_log.ps1": {
+      "timeoutSec": 15,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
+    "web_flow_guarded.ps1": {
+      "timeoutSec": 220,
+      "maxRetries": 0,
+      "risk": "low",
+      "requiresApproval": false
+    },
     "uia_ahk_cross_train.ps1": {
       "timeoutSec": 90,
       "maxRetries": 0,
