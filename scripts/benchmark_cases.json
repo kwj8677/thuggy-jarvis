@@ -1,14 +1,14 @@
 [
-  {
-    "query": "gateway 장애 auto-recover email 보고",
-    "expects_any": ["auto-recover", "gateway", "email"]
-  },
-  {
-    "query": "windows psw 패턴",
-    "expects_any": ["psw", "Windows"]
-  },
-  {
-    "query": "운영 원칙 안정성 우선",
-    "expects_any": ["안정성", "운영 원칙"]
-  }
+  {"query":"gateway 장애 auto-recover email 보고","expects_any":["auto-recover","gateway","email"]},
+  {"query":"windows psw 패턴","expects_any":["psw","Windows"]},
+  {"query":"운영 원칙 안정성 우선","expects_any":["안정성","운영 원칙"]},
+  {"query":"장애 보고 3줄 원인 조치 결과","expects_any":["원인/조치/결과","3줄"]},
+  {"query":"게이트웨이 복구 정책","expects_any":["게이트웨이 장애 대응","auto-recover"]},
+  {"query":"OpenClaw ops project","expects_any":["openclaw-ops","OpenClaw 운영 원칙"]},
+  {"query":"email alert script","expects_any":["send_guard_email.py","email 보고"]},
+  {"query":"windows command rule","expects_any":["psw","Windows 작업"]},
+  {"query":"memory pipeline 운영","expects_any":["memory_pipeline.sh","운영 원칙"]},
+  {"query":"gateway guard dependency","expects_any":["gateway_guard.py","게이트웨이"]},
+  {"query":"정책 변경시 보고","expects_any":["항상 보고","원인/조치/결과"]},
+  {"query":"openclaw 안정성 규칙","expects_any":["안정성 우선","운영 원칙"]}
 ]
