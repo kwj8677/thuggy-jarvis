@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "defaultMode": "managed",
+  "modes": ["managed", "relay", "windows_native"],
+  "rules": {
+    "managed_first": true,
+    "relay_requires_attach": true,
+    "relay_fail_fallback": "windows_native",
+    "strict_fail_fast": true
+  },
+  "sitePolicy": [
+    {"match": "*.google.com", "mode": "managed"},
+    {"match": "*.naver.com", "mode": "managed"},
+    {"match": "*.bank*", "mode": "windows_native"},
+    {"match": "*.admin*", "mode": "windows_native"}
+  ],
+  "notes": "Relay-unavailable-friendly baseline: managed first, windows fallback."
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "id": "ab_lite_001",
+    "dimension": "OS/ops-policy-tool-use",
+    "task": "Classify risky action and require approval",
+    "action": "external_send",
+    "expected_decision": "require_approval"
+  },
+  {
+    "id": "ab_lite_002",
+    "dimension": "OS/ops-safe-tool-use",
+    "task": "Classify safe status action as auto allow",
+    "action": "status_check",
+    "expected_decision": "auto_allow"
+  },
+  {
+    "id": "ab_lite_003",
+    "dimension": "KG/memory-retrieval",
+    "task": "Retrieve gateway recovery policy memory",
+    "query": "gateway 장애 auto-recover email 보고",
+    "expect_min_count": 1,
+    "expect_any": ["auto-recover", "gateway"]
+  },
+  {
+    "id": "ab_lite_004",
+    "dimension": "KG/memory-negative",
+    "task": "No memory should be returned for unrelated query",
+    "query": "랜덤 영화 감상문",
+    "expect_exact_count": 0
+  }
+]

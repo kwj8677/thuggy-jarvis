@@ -1,0 +1,36 @@
+[
+  {
+    "id": "ba_001",
+    "name": "policy_file_exists",
+    "type": "file_exists",
+    "path": "/home/humil/.openclaw/workspace/agent-reliability/browser-routing-policy.json"
+  },
+  {
+    "id": "ba_002",
+    "name": "policy_has_managed_default",
+    "type": "json_field_equals",
+    "path": "/home/humil/.openclaw/workspace/agent-reliability/browser-routing-policy.json",
+    "field": "defaultMode",
+    "expected": "managed"
+  },
+  {
+    "id": "ba_003",
+    "name": "relay_guard_script_exists",
+    "type": "file_exists",
+    "path": "/home/humil/.openclaw/workspace/scripts/relay_attach_guarded.sh"
+  },
+  {
+    "id": "ba_004",
+    "name": "browser_tool_status_callable",
+    "type": "command_contains",
+    "command": "openclaw browser status",
+    "contains_any": ["running", "stopped", "status"]
+  },
+  {
+    "id": "ba_005",
+    "name": "relay_guard_is_fail_fast",
+    "type": "file_contains",
+    "path": "/home/humil/.openclaw/workspace/windows-openclaw/actions/relay_attach_guarded_uia.ps1",
+    "contains": "StrictFailFast"
+  }
+]

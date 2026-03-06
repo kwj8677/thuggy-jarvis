@@ -12,6 +12,12 @@
 - Weekly proactive report (even if user forgets):
   - Every Saturday first heartbeat, run `scripts/memory_metrics_report.py` and `scripts/memory_weekly_rollup.py --force`.
   - Then send a concise push update: hit-rate, re-explain count, wrong-reference count, and next tuning action.
+- Model watch (GPT-5.4):
+  - Run `scripts/check_gpt54.sh` once per day.
+  - If output has `new_alert=true`, proactively notify user that GPT-5.4 is now visible in model catalog.
+- Relay guarded attach (only when relay-required workflows are queued):
+  - Run `scripts/relay_attach_guarded.sh` (max attempts + total timeout + lock + circuit cooldown).
+  - Never loop infinitely; if guard fails, report concise failure reason and fallback route.
 - It auto-rolls old `/tmp/openclaw/openclaw-*.log` files and detects: 429, rate limit, FailoverError, embedded run timeout, gateway timeout.
 - It dedupes repeated lines, classifies severity (warn/critical), and on alert auto-recovers gateway then verifies.
 - Reporting policy:
