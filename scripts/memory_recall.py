@@ -12,6 +12,12 @@ TYPE_WEIGHT = {
     'preference': 0.8,
     'fact': 0.7,
 }
+
+CLASS_WEIGHT_BY_INTENT = {
+    'procedural': {'procedural': 1.0, 'semantic': 0.9, 'episodic': 0.85},
+    'episodic': {'episodic': 1.0, 'procedural': 0.9, 'semantic': 0.85},
+    'semantic': {'semantic': 1.0, 'procedural': 0.92, 'episodic': 0.9},
+}
 TTL_DEFAULT = {
     'fact': 180,
     'preference': 90,
@@ -116,10 +122,24 @@ def source_trust(item):
     return 0.8
 
 
+def infer_intent_class(q: str) -> str:
+    ql = (q or '').lower()
+    if any(k in ql for k in ['어떻게', '절차', '규칙', '원칙', 'policy', 'runbook', 'rule', 'script']):
+        return 'procedural'
+    if any(k in ql for k in ['최근', '방금', '지난', '히스토리', 'history', 'what happened']):
+        return 'episodic'
+    return 'semantic'
+
+
+def class_weight(intent: str, mem_class: str) -> float:
+    return CLASS_WEIGHT_BY_INTENT.get(intent, {}).get(mem_class, 0.75)
+
+
 def base_score(q, item, n):
     if item.get('status', 'active') != 'active':
         return -1
     sem = keyword_score(q, item.get('text', ''))
+    intent = infer_intent_class(q)
     graph_text = ' '.join([
         str(item.get('entity') or ''),
         str(item.get('project') or ''),
@@ -128,9 +148,12 @@ def base_score(q, item, n):
     graph_bonus = keyword_score(q, graph_text) if graph_text else 0.0
     fresh = freshness_score(item, n)
     conf = float(item.get('confidence', 0.6))
+    importance = float(item.get('importance', 0.6))
     tw = TYPE_WEIGHT.get(item.get('type', ''), 0.5)
     trust = source_trust(item)
-    return 0.44 * sem + 0.14 * graph_bonus + 0.18 * fresh + 0.10 * conf + 0.05 * tw + 0.09 * trust
+    mem_class = str(item.get('memory_class') or ('procedural' if item.get('type') == 'decision' else 'semantic'))
+    cw = class_weight(intent, mem_class)
+    return (0.40 * sem + 0.12 * graph_bonus + 0.16 * fresh + 0.09 * conf + 0.09 * importance + 0.05 * tw + 0.09 * trust) * cw
 
 
 def rerank_score(q, item, s0):

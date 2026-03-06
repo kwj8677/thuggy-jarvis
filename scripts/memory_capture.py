@@ -4,8 +4,10 @@ import json
 import time
 import uuid
 from pathlib import Path
+from memory_store_adapter import JsonlMemoryStoreAdapter
 
 ITEMS = Path('/home/humil/.openclaw/workspace/memory/memory_items.jsonl')
+STORE = JsonlMemoryStoreAdapter(str(ITEMS))
 
 TTL_DEFAULT = {
     'fact': 180,
@@ -14,24 +16,20 @@ TTL_DEFAULT = {
     'task_state': 14,
 }
 
+CLASS_BY_TYPE = {
+    'fact': 'semantic',
+    'preference': 'semantic',
+    'decision': 'procedural',
+    'task_state': 'episodic',
+}
+
 
 def iso_now():
     return __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()
 
 
 def load_items():
-    arr = []
-    if not ITEMS.exists():
-        return arr
-    for ln in ITEMS.read_text(encoding='utf-8', errors='replace').splitlines():
-        ln = ln.strip()
-        if not ln:
-            continue
-        try:
-            arr.append(json.loads(ln))
-        except Exception:
-            pass
-    return arr
+    return STORE.load()
 
 
 def text_sim(a, b):
@@ -57,6 +55,21 @@ def confidence_by_source(source: str, base: float) -> float:
     if 'auto' in s:
         return min(1.0, max(0.6, base))
     return min(1.0, max(0.5, base))
+
+
+def estimate_importance(mtype: str, text: str, source: str, confidence: float) -> float:
+    base = 0.55
+    if mtype == 'decision':
+        base += 0.2
+    elif mtype == 'task_state':
+        base += 0.1
+    t = (text or '').lower()
+    if any(k in t for k in ['항상', '반드시', '원칙', '정책']):
+        base += 0.1
+    if 'user' in (source or '').lower():
+        base += 0.05
+    base += max(0.0, min(0.15, (confidence - 0.6) * 0.5))
+    return round(max(0.05, min(0.99, base)), 3)
 
 
 def main():
@@ -88,6 +101,8 @@ def main():
 
     deps = [x.strip() for x in (args.depends_on or '').split(',') if x.strip()]
 
+    importance = estimate_importance(args.type, args.text, args.source, conf)
+
     item = {
         'id': str(uuid.uuid4()),
         'type': args.type,
@@ -96,18 +111,18 @@ def main():
         'updated_at': now,
         'last_used_at': None,
         'confidence': round(conf, 3),
+        'importance': importance,
         'ttl_days': TTL_DEFAULT[args.type],
         'status': 'active',
         'source': args.source,
+        'memory_class': CLASS_BY_TYPE.get(args.type, 'semantic'),
         'entity': args.entity.strip() or None,
         'project': args.project.strip() or None,
         'depends_on': deps,
         'tags': []
     }
 
-    ITEMS.parent.mkdir(parents=True, exist_ok=True)
-    with ITEMS.open('a', encoding='utf-8') as f:
-        f.write(json.dumps(item, ensure_ascii=False) + '\n')
+    STORE.append(item)
 
     print(json.dumps({'stored': True, 'item': item}, ensure_ascii=False, indent=2))
 
