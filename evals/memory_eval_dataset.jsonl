@@ -1,0 +1,22 @@
+{"id": "memory_case_001", "input": "gateway 장애 auto-recover email 보고", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["auto-recover", "gateway", "email"], "expects_none": []}}
+{"id": "memory_case_002", "input": "windows psw 패턴", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["psw", "Windows"], "expects_none": []}}
+{"id": "memory_case_003", "input": "운영 원칙 안정성 우선", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["안정성", "운영 원칙"], "expects_none": []}}
+{"id": "memory_case_004", "input": "장애 보고 3줄 원인 조치 결과", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["원인/조치/결과", "3줄"], "expects_none": []}}
+{"id": "memory_case_005", "input": "게이트웨이 복구 정책", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["게이트웨이 장애 대응", "auto-recover"], "expects_none": []}}
+{"id": "memory_case_006", "input": "OpenClaw ops project", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["openclaw-ops", "OpenClaw 운영 원칙"], "expects_none": []}}
+{"id": "memory_case_007", "input": "email alert script", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["send_guard_email.py", "email 보고"], "expects_none": []}}
+{"id": "memory_case_008", "input": "windows command rule", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["psw", "Windows 작업"], "expects_none": []}}
+{"id": "memory_case_009", "input": "memory pipeline 운영", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["memory_pipeline.sh", "운영 원칙"], "expects_none": []}}
+{"id": "memory_case_010", "input": "gateway guard dependency", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["gateway_guard.py", "게이트웨이"], "expects_none": []}}
+{"id": "memory_case_011", "input": "정책 변경시 보고", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["항상 보고", "원인/조치/결과"], "expects_none": []}}
+{"id": "memory_case_012", "input": "openclaw 안정성 규칙", "ideal": "MEMORY_RELEVANT", "meta": {"mode": "any", "expects_any": ["안정성 우선", "운영 원칙"], "expects_none": []}}
+{"id": "memory_case_013", "input": "완전 무관한 축구 경기 결과", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_014", "input": "랜덤 영화 감상문", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_015", "input": "gateway라는 단어만 포함된 시 poem 써줘", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_016", "input": "windows 11 배경화면 추천", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_017", "input": "email 마케팅 카피 아이디어", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_018", "input": "auto-recover가 무슨 뜻인지 영어 문법 설명", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_019", "input": "정책학 입문서 추천", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_020", "input": "메모리 게임 하는 법", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_021", "input": "guard dog 훈련법", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
+{"id": "memory_case_022", "input": "pipeline 병렬처리 일반론 설명", "ideal": "NO_MEMORY", "meta": {"mode": "none", "expects_any": [], "expects_none": []}}
