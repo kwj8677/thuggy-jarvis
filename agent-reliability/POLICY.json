@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "rules": {
+    "require_approval": [
+      "external_send",
+      "delete_destructive",
+      "credential_change",
+      "system_sensitive_config_change"
+    ],
+    "auto_allow": [
+      "workspace_read",
+      "workspace_write_non_destructive",
+      "status_check",
+      "log_analysis"
+    ]
+  },
+  "notes": "Policy-as-code baseline for OpenClaw agent operations."
+}
