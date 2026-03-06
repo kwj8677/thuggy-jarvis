@@ -54,10 +54,18 @@ def main():
                 b_score = float(b.get('confidence', 0.6))
                 if b_score >= a_score:
                     a['status'] = 'superseded'
+                    a['superseded_by'] = b.get('id')
+                    b.setdefault('contradicted_ids', [])
+                    if a.get('id') not in b['contradicted_ids']:
+                        b['contradicted_ids'].append(a.get('id'))
                     changed += 1
                     break
                 else:
                     b['status'] = 'superseded'
+                    b['superseded_by'] = a.get('id')
+                    a.setdefault('contradicted_ids', [])
+                    if b.get('id') not in a['contradicted_ids']:
+                        a['contradicted_ids'].append(b.get('id'))
                     changed += 1
 
     out = {'changed': changed, 'items': len(items)}

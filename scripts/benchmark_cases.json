@@ -1,0 +1,14 @@
+[
+  {
+    "query": "gateway 장애 auto-recover email 보고",
+    "expects_any": ["auto-recover", "gateway", "email"]
+  },
+  {
+    "query": "windows psw 패턴",
+    "expects_any": ["psw", "Windows"]
+  },
+  {
+    "query": "운영 원칙 안정성 우선",
+    "expects_any": ["안정성", "운영 원칙"]
+  }
+]
