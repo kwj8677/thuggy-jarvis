@@ -45,6 +45,17 @@ def eval_case(c):
         except Exception as e:
             return {'id': c['id'], 'ok': False, 'error': str(e)}
 
+    if t == 'command_json_true':
+        try:
+            rc, out = run_cmd(c['command'])
+            if rc != 0:
+                return {'id': c['id'], 'ok': False, 'rc': rc}
+            j = json.loads(out)
+            ok = bool(j.get(c.get('field'))) == bool(c.get('expected'))
+            return {'id': c['id'], 'ok': ok, 'value': j.get(c.get('field'))}
+        except Exception as e:
+            return {'id': c['id'], 'ok': False, 'error': str(e)}
+
     return {'id': c.get('id', 'unknown'), 'ok': False, 'error': 'unknown_type'}
 
 

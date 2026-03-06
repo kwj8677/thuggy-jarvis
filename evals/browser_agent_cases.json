@@ -32,5 +32,13 @@
     "type": "file_contains",
     "path": "/home/humil/.openclaw/workspace/windows-openclaw/actions/relay_attach_guarded_uia.ps1",
     "contains": "StrictFailFast"
+  },
+  {
+    "id": "ba_006",
+    "name": "browser_window_probe_real_visibility",
+    "type": "command_json_true",
+    "command": "/home/humil/.openclaw/workspace/scripts/browser_window_probe.py",
+    "field": "ok",
+    "expected": true
   }
 ]
