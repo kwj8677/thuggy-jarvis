@@ -52,16 +52,34 @@ def load_items():
     return out
 
 
+SYNONYMS = {
+    '정책': '원칙',
+    '규정': '원칙',
+    '변경시': '앞으로',
+    '복구': '장애대응',
+    '게이트웨이': 'gateway',
+}
+
+
+def normalize_token(t: str) -> str:
+    t = t.strip().lower()
+    return SYNONYMS.get(t, t)
+
+
 def terms(s: str):
-    return [t for t in (s or '').lower().replace(',', ' ').split() if t]
+    return [normalize_token(t) for t in (s or '').lower().replace(',', ' ').split() if t]
 
 
 def keyword_score(q, txt):
     q_terms = terms(q)
     if not q_terms:
         return 0.0
+    txt_tokens = set(terms(txt or ''))
     txt_l = (txt or '').lower()
-    hit = sum(1 for t in q_terms if t in txt_l)
+    hit = 0
+    for t in q_terms:
+        if t in txt_tokens or t in txt_l:
+            hit += 1
     return hit / len(q_terms)
 
 
@@ -130,27 +148,69 @@ def rerank_score(q, item, s0):
     return s0 + 0.18 * pbonus + ep_boost
 
 
-def graph_expand(selected, all_items, max_extra=2):
+def overlap_stats(q, item):
+    q_terms = set(terms(q))
+    if not q_terms:
+        return 0.0, 0, 0
+    bag_raw = ' '.join([
+        str(item.get('text') or ''),
+        str(item.get('entity') or ''),
+        str(item.get('project') or ''),
+        ' '.join(item.get('depends_on') or []),
+    ]).lower()
+    bag_terms = set(terms(bag_raw))
+    hit_count = sum(1 for t in q_terms if (t in bag_terms or t in bag_raw))
+    return hit_count / max(1, len(q_terms)), hit_count, len(q_terms)
+
+
+def graph_expand(selected, all_items, max_extra=3, hops=2):
     if not selected:
         return selected
+
+    # multi-hop key propagation (project/entity/depends_on)
     seen_ids = {x.get('id') for x in selected}
     key_projects = {x.get('project') for x in selected if x.get('project')}
     key_entities = {x.get('entity') for x in selected if x.get('entity')}
+    key_deps = set()
+    for x in selected:
+        for d in (x.get('depends_on') or []):
+            key_deps.add(str(d).lower())
 
-    extra = []
-    for it in all_items:
-        if it.get('id') in seen_ids:
-            continue
-        if it.get('status', 'active') != 'active':
-            continue
-        if (it.get('project') in key_projects) or (it.get('entity') in key_entities):
-            x = dict(it)
-            x['score'] = round(float(x.get('score', 0.0)) + 0.03, 4)
-            extra.append(x)
-        if len(extra) >= max_extra:
+    picked = list(selected)
+
+    for hop in range(max(1, hops)):
+        added = 0
+        for it in all_items:
+            if it.get('id') in seen_ids:
+                continue
+            if it.get('status', 'active') != 'active':
+                continue
+
+            deps = {str(d).lower() for d in (it.get('depends_on') or [])}
+            hit = False
+            if (it.get('project') in key_projects) or (it.get('entity') in key_entities):
+                hit = True
+            elif key_deps and (deps & key_deps):
+                hit = True
+
+            if hit:
+                x = dict(it)
+                x['score'] = round(float(x.get('score', 0.0)) + (0.03 / (hop + 1)), 4)
+                picked.append(x)
+                seen_ids.add(it.get('id'))
+                if it.get('project'):
+                    key_projects.add(it.get('project'))
+                if it.get('entity'):
+                    key_entities.add(it.get('entity'))
+                for d in deps:
+                    key_deps.add(d)
+                added += 1
+                if len(picked) >= len(selected) + max_extra:
+                    return picked
+        if added == 0:
             break
-    return selected + extra
 
+    return picked
 
 def main():
     ap = argparse.ArgumentParser(description='Memory recall v2 (hybrid + rerank + graph expansion)')
@@ -158,6 +218,9 @@ def main():
     ap.add_argument('--top-k', type=int, default=3)
     ap.add_argument('--min-score', type=float, default=0.45)
     ap.add_argument('--expand-graph', action='store_true')
+    ap.add_argument('--graph-hops', type=int, default=2)
+    ap.add_argument('--min-overlap', type=float, default=0.3)
+    ap.add_argument('--hard-cutoff', type=float, default=0.42)
     args = ap.parse_args()
 
     n = now_ts()
@@ -180,12 +243,26 @@ def main():
             break
         if s < args.min_score:
             continue
+        ov, hit_count, q_count = overlap_stats(args.query, it)
+        if ov < args.min_overlap:
+            continue
+        # anti-false-positive: usually require >=2 matched terms for longer queries,
+        # but allow 1-term match when model score is very strong.
+        min_hit_terms = 2 if q_count >= 3 else 1
+        if hit_count < min_hit_terms and s < (args.hard_cutoff + 0.15):
+            continue
         x = dict(it)
         x['score'] = round(s, 4)
+        x['overlap'] = round(ov, 4)
+        x['hit_terms'] = hit_count
         out.append(x)
 
-    if args.expand_graph:
-        out = graph_expand(out, [dict(i) for _, i in scored], max_extra=2)
+    # hard cutoff: if even top selected score is low, return empty to avoid false positives
+    if out and max(float(x.get('score', 0.0)) for x in out) < args.hard_cutoff:
+        out = []
+
+    if args.expand_graph and out:
+        out = graph_expand(out, [dict(i) for _, i in scored], max_extra=3, hops=args.graph_hops)
 
     print(json.dumps({
         'query': args.query,

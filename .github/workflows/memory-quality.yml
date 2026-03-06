@@ -1,0 +1,32 @@
+name: memory-quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  benchmark-and-reliability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/memory_benchmark.py scripts/memory_autotune_guard.py scripts/agent_eval.py scripts/memory_recall.py scripts/memory_drift_check.py scripts/policy_enforce_check.py scripts/tool_circuit_breaker.py || true
+
+      - name: Run memory benchmark
+        run: ./scripts/memory_benchmark.py
+
+      - name: Run autotune guard
+        run: ./scripts/memory_autotune_guard.py
+
+      - name: Run agent eval
+        run: ./scripts/agent_eval.py

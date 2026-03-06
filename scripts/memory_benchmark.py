@@ -17,11 +17,20 @@ def run_case(q):
         return None
 
 
-def hit_case(result, expects_any):
+def hit_case(result, case):
     if not result:
         return False
     txt = ' '.join([(x.get('text') or '') for x in (result.get('items') or [])]).lower()
-    return any(e.lower() in txt for e in expects_any)
+    mode = case.get('mode', 'any')
+    any_terms = case.get('expects_any', [])
+    none_terms = case.get('expects_none', [])
+
+    if mode == 'none':
+        # strict negative case: should return no recalled items
+        return int(result.get('count', 0)) == 0
+    if mode == 'all':
+        return all(t.lower() in txt for t in any_terms)
+    return any(t.lower() in txt for t in any_terms)
 
 
 def main():
@@ -34,7 +43,7 @@ def main():
     hit = 0
     for c in cases:
         r = run_case(c['query'])
-        h = hit_case(r, c.get('expects_any', []))
+        h = hit_case(r, c)
         if h:
             hit += 1
         rows.append({'query': c['query'], 'hit': h, 'count': (r or {}).get('count', 0)})

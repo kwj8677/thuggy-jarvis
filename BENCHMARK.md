@@ -20,7 +20,13 @@ Claims like "better memory" are only useful when they are measurable and reprodu
 ```bash
 ./scripts/memory_benchmark.py
 ./scripts/memory_autotune_guard.py
+./scripts/agent_eval.py
 ```
+
+## CI Gate
+- GitHub Actions workflow: `.github/workflows/memory-quality.yml`
+- Runs on push/PR/manual dispatch
+- Gate includes benchmark + autotune guard + agent reliability eval
 
 ## Pass Criteria (current)
 - Benchmark hit rate threshold for autotune guard: **>= 95.0%**
