@@ -1,0 +1,197 @@
+{
+  "generated_at": "2026-03-11 01:44:23 KST",
+  "mode": "relayless-browser-dataset-split",
+  "operational": {
+    "summary": {
+      "runs": 10,
+      "success": 9,
+      "fail": 1,
+      "success_rate": 0.9,
+      "bucket_counts": {
+        "OK": 9,
+        "HTTP_429": 1
+      },
+      "avg_ms": 1021
+    },
+    "cases": [
+      {
+        "url": "https://docs.openclaw.ai",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 439
+      },
+      {
+        "url": "https://docs.openclaw.ai/llms.txt",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 306
+      },
+      {
+        "url": "https://github.com/openclaw/openclaw",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 881
+      },
+      {
+        "url": "https://github.com/openclaw/openclaw/blob/main/README.md",
+        "ok": false,
+        "status": 429,
+        "error": null,
+        "bucket": "HTTP_429",
+        "elapsed_ms": 441
+      },
+      {
+        "url": "https://github.com/openclaw/openclaw/issues",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 1157
+      },
+      {
+        "url": "https://httpbin.org/redirect/1",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 2333
+      },
+      {
+        "url": "https://httpbin.org/delay/2",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 3309
+      },
+      {
+        "url": "https://example.org",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 240
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9110",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 278
+      },
+      {
+        "url": "https://www.wikipedia.org",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 829
+      }
+    ]
+  },
+  "resilience": {
+    "summary": {
+      "runs": 10,
+      "success": 2,
+      "fail": 8,
+      "success_rate": 0.2,
+      "bucket_counts": {
+        "DNS_ENOTFOUND": 1,
+        "NETWORK_OR_FETCH": 2,
+        "HTTP_429": 1,
+        "HTTP_5XX": 4,
+        "OK": 2
+      },
+      "avg_ms": 1482
+    },
+    "cases": [
+      {
+        "url": "https://nonexistent-openclaw-test-abc123.example",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='nonexistent-openclaw-test-abc123.example', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fc31ec9b4d0>: Failed to resolve 'nonexistent-openclaw-test-abc123.example' ([Errno -2] Name or service not known)\"))",
+        "bucket": "DNS_ENOTFOUND",
+        "elapsed_ms": 149
+      },
+      {
+        "url": "https://httpstat.us/503",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='httpstat.us', port=443): Max retries exceeded with url: /503 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fc31e170830>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 120
+      },
+      {
+        "url": "https://httpstat.us/504",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='httpstat.us', port=443): Max retries exceeded with url: /504 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fc31e170200>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 68
+      },
+      {
+        "url": "https://httpbin.org/status/429",
+        "ok": false,
+        "status": 429,
+        "error": null,
+        "bucket": "HTTP_429",
+        "elapsed_ms": 1217
+      },
+      {
+        "url": "https://httpbin.org/status/500",
+        "ok": false,
+        "status": 500,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 1103
+      },
+      {
+        "url": "https://httpbin.org/status/502",
+        "ok": false,
+        "status": 502,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 1177
+      },
+      {
+        "url": "https://httpbin.org/status/503",
+        "ok": false,
+        "status": 503,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 1074
+      },
+      {
+        "url": "https://httpbin.org/status/504",
+        "ok": false,
+        "status": 504,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 1141
+      },
+      {
+        "url": "https://httpbin.org/delay/5",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 6849
+      },
+      {
+        "url": "https://httpbin.org/redirect/3",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 1928
+      }
+    ]
+  }
+}
