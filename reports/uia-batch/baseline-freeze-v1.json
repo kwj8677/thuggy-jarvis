@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-03-11 01:22:04",
+  "goal": "macOS-grade-control-expansion-v1 baseline freeze",
+  "stages": [
+    {
+      "stage": "L3",
+      "summary_file": "20260311-010023-L3.summary.json",
+      "runs_executed": 3,
+      "pass": 3,
+      "fail": 0,
+      "retry_count": 0,
+      "error_bucket": "NONE",
+      "api_calls_total": 3,
+      "api_calls_primary": 0,
+      "api_calls_subagent": 3,
+      "api_calls_fallback": 0,
+      "log": "/home/humil/.openclaw/workspace/reports/uia-batch/20260311-010023-L3.log"
+    },
+    {
+      "stage": "L4",
+      "summary_file": "20260311-010148-L4.summary.json",
+      "runs_executed": 3,
+      "pass": 3,
+      "fail": 0,
+      "retry_count": 0,
+      "error_bucket": "NONE",
+      "api_calls_total": 3,
+      "api_calls_primary": 0,
+      "api_calls_subagent": 3,
+      "api_calls_fallback": 0,
+      "log": "/home/humil/.openclaw/workspace/reports/uia-batch/20260311-010148-L4.log"
+    },
+    {
+      "stage": "L5",
+      "summary_file": "20260311-010412-L5.summary.json",
+      "runs_executed": 3,
+      "pass": 3,
+      "fail": 0,
+      "retry_count": 0,
+      "error_bucket": "NONE",
+      "api_calls_total": 3,
+      "api_calls_primary": 0,
+      "api_calls_subagent": 3,
+      "api_calls_fallback": 0,
+      "log": "/home/humil/.openclaw/workspace/reports/uia-batch/20260311-010412-L5.log"
+    }
+  ]
+}
