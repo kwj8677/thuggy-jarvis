@@ -53,16 +53,31 @@ for ((i=1; i<=RUNS; i++)); do
       run_ok=1
       break
     else
-      if bash "$RUN_STAGE" "$STAGE" >> "$LOG" 2>&1; then
+      ATTEMPT_LOG="$(mktemp)"
+      if bash "$RUN_STAGE" "$STAGE" > "$ATTEMPT_LOG" 2>&1; then
+        cat "$ATTEMPT_LOG" >> "$LOG"
+        rm -f "$ATTEMPT_LOG"
         run_ok=1
         break
+      else
+        cat "$ATTEMPT_LOG" >> "$LOG"
+        # Fatal configuration/mapping errors should not retry.
+        if grep -Eiq "Action not found|Invalid config|No such file|Unknown stage|mapping" "$ATTEMPT_LOG"; then
+          echo "[FATAL_CONFIG] non-retryable error detected; open circuit immediately" | tee -a "$LOG"
+          rm -f "$ATTEMPT_LOG"
+          consecutive_failures=$CIRCUIT_BREAK_FAILS
+          break
+        fi
+        rm -f "$ATTEMPT_LOG"
       fi
     fi
 
     if (( attempt <= MAX_RETRY )); then
       retry_count=$((retry_count+1))
-      echo "[RUN $i] retry after ${COOLDOWN_SEC}s" | tee -a "$LOG"
-      sleep "$COOLDOWN_SEC"
+      # Progressive cooldown for repeated transient failures
+      current_cooldown=$((COOLDOWN_SEC * attempt))
+      echo "[RUN $i] retry after ${current_cooldown}s" | tee -a "$LOG"
+      sleep "$current_cooldown"
     fi
   done
 
