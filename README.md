@@ -23,6 +23,8 @@ See: [BENCHMARK.md](./BENCHMARK.md)
 - Engineering routine (machine profile): `ops/engineering-routine.json`
 - Instant execution prompt (human-readable): `ops/instant-exec-prompt.md`
 - Instant execution prompt (machine profile): `ops/instant-exec-prompt.json`
+- macOS-grade control expansion plan (human-readable): `ops/macos-grade-control-expansion-v1.md`
+- macOS-grade control expansion plan (machine profile): `ops/macos-grade-control-expansion-v1.json`
 - Heartbeat throttle rules: `HEARTBEAT.md`
 - User preference source: `USER.md`
 

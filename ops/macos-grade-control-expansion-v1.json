@@ -1,0 +1,48 @@
+{
+  "version": "2026-03-11",
+  "goal": "macos-grade-control-on-windows",
+  "scope": {
+    "uiaBaseline": true,
+    "relaylessBrowsing": true,
+    "hybridControl": true
+  },
+  "orchestration": {
+    "primary": "windows-uia-ops",
+    "browser": "openclaw-browser-non-relay",
+    "fallback": "desktop-vision-minimal"
+  },
+  "workflow": [
+    "freeze-baseline",
+    "build-browser-pipeline-v1",
+    "apply-hybrid-routing",
+    "smoke-3",
+    "batch-10",
+    "quality-gate",
+    "report"
+  ],
+  "guards": {
+    "maxRetry": 1,
+    "cooldownSec": 30,
+    "circuitBreakConsecutiveFailures": 3,
+    "stageTimeoutSec": 180,
+    "apiCallCap": 50,
+    "singleInstanceLock": true
+  },
+  "qualityGate": {
+    "minSuccessRate": 0.9,
+    "maxRetryRate": 0.1,
+    "maxFallbackRate": 0.2,
+    "requireNoRunawayLoop": true
+  },
+  "metrics": [
+    "pass",
+    "fail",
+    "retry",
+    "api_calls_total",
+    "api_calls_primary",
+    "api_calls_subagent",
+    "api_calls_fallback",
+    "error_bucket",
+    "avg_runtime_sec"
+  ]
+}
