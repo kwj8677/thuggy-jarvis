@@ -6,6 +6,16 @@ if [[ -z "$stage" ]]; then
   exit 2
 fi
 
+# Runtime selector guard (stable policy)
+# Optional input contract: SELECTOR_HINT can be passed by caller.
+# Reject name-only selector for write stages.
+if [[ "${SELECTOR_HINT:-}" =~ ^name-only: ]]; then
+  if [[ "$stage" =~ ^(L3|l3|L4|l4|L5|l5|settings_l3_pipeline_uia\.ps1|chrome_uia_pipeline\.ps1|relay_uia_pipeline\.ps1)$ ]]; then
+    echo "[FATAL_SELECTOR] Name-only selector is forbidden for write stages: $stage"
+    exit 4
+  fi
+fi
+
 # Stage alias mapping (stable defaults)
 case "$stage" in
   L1|l1) action="win_gui_l1_pipeline_uia.ps1" ;;
@@ -16,5 +26,6 @@ case "$stage" in
   *) action="$stage" ;;
 esac
 
+echo "[SELECTOR_POLICY] write-stage requires AutomationId/ControlType (name-only forbidden)"
 echo "[API_CALL] windows_action=$action via C:\openclaw\run.ps1"
 /home/humil/.openclaw/workspace/scripts/fsw "& 'C:\openclaw\run.ps1' -Action 'session_gate.ps1' -TimeoutSec 20; if (\$LASTEXITCODE -ne 0) { exit \$LASTEXITCODE }; & 'C:\openclaw\run.ps1' -Action '$action' -TimeoutSec 120"
