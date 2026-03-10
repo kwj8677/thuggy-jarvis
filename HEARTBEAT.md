@@ -1,34 +1,30 @@
 # HEARTBEAT.md
 
-# Proactive monitoring checklist (user-approved)
+# Proactive monitoring checklist (cost-aware)
 
-- Run `scripts/gateway_guard.py --recover-on-alert --notify-cmd '/home/humil/.openclaw/workspace/scripts/send_guard_email.py'` each heartbeat.
-- Run `scripts/memory_weekly_rollup.py` once per day (first heartbeat only) to keep weekly context fresh.
-- Run `scripts/memory_context.py` once per day (or after major policy changes) to refresh `/tmp/openclaw/memory-context-latest.json`.
-- Run `scripts/memory_curate.py` once per day (first heartbeat only) to prune duplicates/conflicts.
-- Run `scripts/memory_preflight_brief.py` before major user-facing reports to keep continuity cues in the response.
-- For daily memory quality smoke test, run `scripts/memory_pipeline.sh` once (context→compose→curate(dry-run)→metrics report).
-- If user gives explicit correctness signal (e.g., "맞아/틀려"), run `scripts/memory_feedback_auto.py --text '<signal>'` to auto-adjust top recalled item confidence.
-- Weekly proactive report (even if user forgets):
-  - Every Saturday first heartbeat, run `scripts/memory_metrics_report.py` and `scripts/memory_weekly_rollup.py --force`.
-  - Then send a concise push update: hit-rate, re-explain count, wrong-reference count, and next tuning action.
-- Model watch (GPT-5.4):
-  - Run `scripts/check_gpt54.sh` once per day.
-  - If output has `new_alert=true`, proactively notify user that GPT-5.4 is now visible in model catalog.
-- Relay guarded attach (only when relay-required workflows are queued):
-  - Run `scripts/relay_attach_guarded.sh` (max attempts + total timeout + lock + circuit cooldown).
-  - Never loop infinitely; if guard fails, report concise failure reason and fallback route.
-- It auto-rolls old `/tmp/openclaw/openclaw-*.log` files and detects: 429, rate limit, FailoverError, embedded run timeout, gateway timeout.
-- It dedupes repeated lines, classifies severity (warn/critical), and on alert auto-recovers gateway then verifies.
-- Reporting policy:
-  - If `recovery.attempted=true`: always report (what failed, restart result, verify result).
-  - If `alert=true` after recovery: immediate high-priority alert + next mitigation.
-  - If recovered (`recovery.restart_ok=true` and `recovery.verify_ok=true`): send concise recovery report (cause/time/fix/result).
+> API 낭비 방지 우선. 상세 규칙은 `ops/api-efficiency-policy.json` 기준.
 
-- Check Gmail (Relay-attached tab) inbox summary:
-  - Report only high-priority categories:
-    - billing/payment failures
-    - security/sign-in alerts
-    - secret leak/exposure alerts
-  - Ignore promotions/social noise.
-  - If new high-priority mail exists, send concise alert with sender + subject + time.
+## Global guards
+- Do not run proactive checks more than **3 times/day**.
+- If same check ran within **4 hours**, skip it.
+- Never use tight polling loops.
+- Quiet hours (23:00-08:00 KST): alert only for critical items.
+
+## Allowed checks (throttled)
+- Watchdog SoT reference only: `ops/watchdog-sot.md`.
+- Memory maintenance (first heartbeat of day only):
+  - `scripts/memory_weekly_rollup.py`
+  - `scripts/memory_context.py`
+  - `scripts/memory_curate.py`
+- Memory quality smoke test: `scripts/memory_pipeline.sh` (max once/day).
+- Correctness feedback event only: run `scripts/memory_feedback_auto.py --text '<signal>'` when user explicitly says 맞아/틀려.
+- Weekly report (Saturday first heartbeat only):
+  - `scripts/memory_metrics_report.py`
+  - `scripts/memory_weekly_rollup.py --force`
+- Model watch: `scripts/check_gpt54.sh` (max once/day).
+- Relay attach guard: `scripts/relay_attach_guarded.sh` only when relay-required task queue exists.
+- Gmail summary: only high-priority categories (billing/security/secret exposure); ignore noise.
+
+## Reporting rule
+- Send concise summary only when there is a net-new, high-priority signal.
+- Otherwise respond `HEARTBEAT_OK`.

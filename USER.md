@@ -24,6 +24,8 @@ _Learn about the person you're helping. Update this as you go._
   - 시크릿은 기억에 의존하지 않고 파일(`secrets/local-secrets.json`)을 단일 진실원(SoT)으로 사용한다
   - 세션은 분리하되 공통 기억(MEMORY.md, memory/*.md)은 통합 활용하고, 필요 시 다른 세션 기록(sessions_history)도 자율적으로 조회해 문맥을 보완한다
   - 사용자 채팅은 단일 스레드로 유지하고, 내부적으로 작업 맥락(운영/마케팅/실험)을 자동 분류·분리하여 처리 후 통합 보고한다 (사용자에게 태그 입력 요구하지 않음)
+  - 중요 이슈 답변 시 "더블체크 → 결론 → 냉정한 반론(한계/대안) → 다음 액션" 형식의 보고를 선호
+  - API 호출량 낭비를 매우 싫어함: 중복 호출/반복 폴링/과도한 proactive 체크 지양, 변경은 묶어서 1회 적용 선호
 
 ## Context
 

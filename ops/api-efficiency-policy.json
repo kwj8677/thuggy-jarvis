@@ -1,0 +1,42 @@
+{
+  "version": "2026-03-10",
+  "owner": "jinkim90",
+  "intent": "Minimize API waste while preserving reliability",
+  "rules": {
+    "languageStyle": {
+      "nonCode": "ko",
+      "codeAndIds": "en"
+    },
+    "requestDiscipline": {
+      "noDuplicateQuestioning": true,
+      "confirmThenExecute": true,
+      "singlePassVerification": true
+    },
+    "polling": {
+      "minPollIntervalSec": 30,
+      "avoidTightLoops": true,
+      "preferLongYieldOrPushCompletion": true
+    },
+    "heartbeat": {
+      "maxProactiveChecksPerDay": 3,
+      "skipIfCheckedWithinMinutes": 240,
+      "quietHours": "23:00-08:00 Asia/Seoul",
+      "onlyHighPriorityAlerts": true
+    },
+    "memoryPipeline": {
+      "runAtMostPerDay": 1,
+      "triggerOnMajorChangesOnly": true,
+      "searchThenGet": true
+    },
+    "modelPolicy": {
+      "main": "openai-codex/gpt-5.3-codex (oauth)",
+      "fallback": ["openrouter/openrouter/free"],
+      "subagent": "openrouter/openrouter/free",
+      "embedding": "nvidia/llama-nemotron-embed-vl-1b-v2:free via OpenRouter"
+    },
+    "restarts": {
+      "requireUserApproval": true,
+      "batchChangesBeforeRestart": true
+    }
+  }
+}
