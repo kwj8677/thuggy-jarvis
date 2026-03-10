@@ -57,6 +57,7 @@ Build macOS-grade reliability for Windows automation using UIA-first architectur
 - Coordinate-only automation as default
 - Multi-skill parallel write actions on same app
 - Success decision without evidence
+- Name-only selector for write actions (forbidden)
 
 ## Limitation -> Mitigation Patterns
 

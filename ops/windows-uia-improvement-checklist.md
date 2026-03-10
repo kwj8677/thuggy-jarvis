@@ -9,6 +9,7 @@ Apply proven reliability patterns from community references (FlaUI/UIA/pywinauto
   2) `AutomationId + ControlType`
   3) `Name + ControlType`
 - [ ] Avoid Name-only selectors for write actions.
+- [ ] Enforce hard rule: Name-only selector for write actions is forbidden.
 - [ ] Record selector miss reason codes:
   - `NOT_FOUND`
   - `UNSTABLE_ID`
