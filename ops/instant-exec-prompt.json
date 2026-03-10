@@ -1,0 +1,37 @@
+{
+  "version": "2026-03-11",
+  "name": "instant-exec-stable",
+  "language": {
+    "nonCode": "ko",
+    "code": "en"
+  },
+  "goal": "stable",
+  "workflow": [
+    "collect-references",
+    "github-related-sources",
+    "comparative-meta-analysis",
+    "single-small-change",
+    "smoke-3",
+    "batch-10",
+    "sync-md-json",
+    "commit-push-report"
+  ],
+  "guards": {
+    "maxRetry": 1,
+    "cooldownSec": 30,
+    "singleInstanceLock": true,
+    "circuitBreakConsecutiveFailures": 3,
+    "nonRetryableConfigErrorsImmediateStop": true,
+    "stageTimeoutSec": 180,
+    "apiCallCap": 50
+  },
+  "success": {
+    "requireStateChangeEvidence": true
+  },
+  "reportFormat": [
+    "double-check",
+    "conclusion",
+    "cold-counterpoint",
+    "next-action"
+  ]
+}

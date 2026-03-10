@@ -21,6 +21,8 @@ See: [BENCHMARK.md](./BENCHMARK.md)
 - API efficiency policy: `ops/api-efficiency-policy.json`
 - Engineering routine (human-readable): `ops/engineering-routine.md`
 - Engineering routine (machine profile): `ops/engineering-routine.json`
+- Instant execution prompt (human-readable): `ops/instant-exec-prompt.md`
+- Instant execution prompt (machine profile): `ops/instant-exec-prompt.json`
 - Heartbeat throttle rules: `HEARTBEAT.md`
 - User preference source: `USER.md`
 
