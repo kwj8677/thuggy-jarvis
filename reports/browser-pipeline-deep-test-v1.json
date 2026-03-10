@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-03-11 01:30 KST",
+  "pipeline": "browser-relayless-v1",
+  "runs": 10,
+  "success": 7,
+  "fail": 3,
+  "success_rate": 0.7,
+  "cases": [
+    {"url": "https://docs.openclaw.ai", "status": "ok", "category": "NORMAL"},
+    {"url": "https://docs.openclaw.ai/llms.txt", "status": "ok", "category": "NORMAL"},
+    {"url": "https://github.com/openclaw/openclaw", "status": "ok", "category": "NORMAL"},
+    {"url": "https://github.com/openclaw/openclaw/issues", "status": "ok", "category": "NORMAL"},
+    {"url": "https://example.com", "status": "failed", "category": "NETWORK_OR_FETCH"},
+    {"url": "https://github.com/openclaw/openclaw/blob/main/README.md", "status": "ok", "category": "NORMAL"},
+    {"url": "https://httpbin.org/redirect/1", "status": "ok", "category": "REDIRECT"},
+    {"url": "https://httpbin.org/delay/2", "status": "ok", "category": "DELAY"},
+    {"url": "https://httpstat.us/503", "status": "failed", "category": "BLOCKED_SPECIAL_IP"},
+    {"url": "https://nonexistent-openclaw-test-abc123.example", "status": "failed", "category": "DNS_ENOTFOUND"}
+  ],
+  "quality_gate": {
+    "min_fetch_success_rate": 0.9,
+    "passed": false
+  },
+  "meta_conclusion": "심화 테스트 기준 성공률 70%로 품질 게이트(90%) 미달. 실패 버킷 분리 및 재시도/대체 URL 정책 보강 필요."
+}
