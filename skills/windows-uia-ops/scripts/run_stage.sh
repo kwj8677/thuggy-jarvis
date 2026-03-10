@@ -16,4 +16,5 @@ case "$stage" in
   *) action="$stage" ;;
 esac
 
+echo "[API_CALL] windows_action=$action via C:\openclaw\run.ps1"
 /home/humil/.openclaw/workspace/scripts/fsw "& 'C:\openclaw\run.ps1' -Action 'session_gate.ps1' -TimeoutSec 20; if (\$LASTEXITCODE -ne 0) { exit \$LASTEXITCODE }; & 'C:\openclaw\run.ps1' -Action '$action' -TimeoutSec 120"

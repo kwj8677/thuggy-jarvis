@@ -10,7 +10,9 @@ MAX_RETRY="${MAX_RETRY:-1}"
 COOLDOWN_SEC="${COOLDOWN_SEC:-30}"
 DRY_RUN="${DRY_RUN:-1}"                 # 1=dry-run, 0=execute
 CIRCUIT_BREAK_FAILS="${CIRCUIT_BREAK_FAILS:-3}"
-API_CALL_REGEX="${API_CALL_REGEX:-openrouter\.ai|api\.openai\.com|generativelanguage\.googleapis\.com}"
+STAGE_TIMEOUT_SEC="${STAGE_TIMEOUT_SEC:-180}"
+API_CALL_CAP="${API_CALL_CAP:-50}"
+API_CALL_REGEX="${API_CALL_REGEX:-\[API_CALL\]|openrouter\.ai|api\.openai\.com|generativelanguage\.googleapis\.com}"
 
 WORKSPACE="/home/humil/.openclaw/workspace"
 RUN_STAGE="$WORKSPACE/skills/windows-uia-ops/scripts/run_stage.sh"
@@ -30,7 +32,7 @@ fi
 trap 'rm -f "$lockfile"' EXIT
 : > "$lockfile"
 
-echo "[INFO] correlation_id=$CORRELATION_ID stage=$STAGE runs=$RUNS max_retry=$MAX_RETRY cooldown=$COOLDOWN_SEC dry_run=$DRY_RUN" | tee -a "$LOG"
+echo "[INFO] correlation_id=$CORRELATION_ID stage=$STAGE runs=$RUNS max_retry=$MAX_RETRY cooldown=$COOLDOWN_SEC stage_timeout=$STAGE_TIMEOUT_SEC api_call_cap=$API_CALL_CAP dry_run=$DRY_RUN" | tee -a "$LOG"
 
 success=0
 failed=0
@@ -55,13 +57,21 @@ for ((i=1; i<=RUNS; i++)); do
       break
     else
       ATTEMPT_LOG="$(mktemp)"
-      if bash "$RUN_STAGE" "$STAGE" > "$ATTEMPT_LOG" 2>&1; then
+      set +e
+      timeout "${STAGE_TIMEOUT_SEC}s" bash "$RUN_STAGE" "$STAGE" > "$ATTEMPT_LOG" 2>&1
+      rc=$?
+      set -e
+
+      if [[ $rc -eq 0 ]]; then
         cat "$ATTEMPT_LOG" >> "$LOG"
         rm -f "$ATTEMPT_LOG"
         run_ok=1
         break
       else
         cat "$ATTEMPT_LOG" >> "$LOG"
+        if [[ $rc -eq 124 ]]; then
+          echo "[TIMEOUT] stage execution exceeded ${STAGE_TIMEOUT_SEC}s" | tee -a "$LOG"
+        fi
         # Fatal configuration/mapping errors should not retry.
         if grep -Eiq "Action not found|Invalid config|No such file|Unknown stage|mapping" "$ATTEMPT_LOG"; then
           echo "[FATAL_CONFIG] non-retryable error detected; open circuit immediately" | tee -a "$LOG"
@@ -98,6 +108,14 @@ for ((i=1; i<=RUNS; i++)); do
     break
   fi
 
+  # Hard API call cap guard (log-pattern based)
+  current_api_calls=$(grep -Eic "$API_CALL_REGEX" "$LOG" || true)
+  if (( current_api_calls >= API_CALL_CAP )); then
+    circuit_break_triggered=1
+    echo "[CIRCUIT_BREAK] stop: api_call_cap reached ($current_api_calls/$API_CALL_CAP)" | tee -a "$LOG"
+    break
+  fi
+
 done
 
 if [[ "$DRY_RUN" == "1" ]]; then
@@ -113,7 +131,7 @@ api_calls=$(grep -Eic "$API_CALL_REGEX" "$LOG" || true)
 error_bucket="NONE"
 if grep -Eiq "Action not found|Invalid config|No such file|Unknown stage|mapping" "$LOG"; then
   error_bucket="CONFIG"
-elif grep -Eiq "timed out|Timeout|timeout" "$LOG"; then
+elif grep -Eiq "\[TIMEOUT\]|timed out|TimeoutError|operation timed out" "$LOG"; then
   error_bucket="TRANSIENT_TIMEOUT"
 elif grep -Eiq "element not found|not found" "$LOG"; then
   error_bucket="TARGET_UI"
