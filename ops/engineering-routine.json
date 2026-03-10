@@ -62,6 +62,14 @@
     "gatewayRestartRequiresApproval": true,
     "restartOncePerBatch": true
   },
+  "weeklyMaintenance": {
+    "checkProfileDrivenRunBaseline": true,
+    "checkRoleBasedApiCountTrend": true
+  },
+  "verificationStatus": {
+    "profileDrivenExecution": "verified",
+    "roleBasedApiCounting": "verified"
+  },
   "apiEfficiency": {
     "avoidDuplicateCalls": true,
     "avoidTightPolling": true,

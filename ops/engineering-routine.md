@@ -65,6 +65,12 @@
 - 레퍼런스 패턴 재검토
 - 재현율 드리프트 확인
 - 불필요 단계/중복 호출 제거
+- profile-driven run(L3/L4/L5) 기준선 점검
+- role-based API count(primary/subagent/fallback) 추세 확인
+
+## Current status (verified)
+- Profile-driven execution: VERIFIED (L3/L4/L5 smoke runs passed)
+- Role-based API counting: ENABLED and VERIFIED
 
 ## Reference sources (GitHub)
 - Microsoft Engineering Playbook
