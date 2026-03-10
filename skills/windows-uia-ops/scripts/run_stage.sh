@@ -27,5 +27,12 @@ case "$stage" in
 esac
 
 echo "[SELECTOR_POLICY] write-stage requires AutomationId/ControlType (name-only forbidden)"
-echo "[API_CALL] windows_action=$action via C:\openclaw\run.ps1"
+# API role markers (default role for this pipeline: subagent)
+API_ROLE="${API_ROLE:-subagent}"
+case "$API_ROLE" in
+  primary|subagent|fallback) ;;
+  *) API_ROLE="subagent" ;;
+esac
+
+echo "[API_CALL][$API_ROLE] windows_action=$action via C:\openclaw\run.ps1"
 /home/humil/.openclaw/workspace/scripts/fsw "& 'C:\openclaw\run.ps1' -Action 'session_gate.ps1' -TimeoutSec 20; if (\$LASTEXITCODE -ne 0) { exit \$LASTEXITCODE }; & 'C:\openclaw\run.ps1' -Action '$action' -TimeoutSec 120"

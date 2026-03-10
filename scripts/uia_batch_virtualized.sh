@@ -163,6 +163,9 @@ fi
 
 # --- Meta analysis (best-effort, log-driven) ---
 api_calls=$(grep -Eic "$API_CALL_REGEX" "$LOG" || true)
+api_calls_primary=$(grep -Eic "\[API_CALL\]\[primary\]" "$LOG" || true)
+api_calls_subagent=$(grep -Eic "\[API_CALL\]\[subagent\]" "$LOG" || true)
+api_calls_fallback=$(grep -Eic "\[API_CALL\]\[fallback\]" "$LOG" || true)
 
 # Error bucket (first match wins)
 error_bucket="NONE"
@@ -224,6 +227,11 @@ cat > "$SUMMARY_JSON" <<JSON
   "meta": {
     "error_bucket": "$error_bucket",
     "api_calls_detected": $api_calls,
+    "api_calls_breakdown": {
+      "primary": $api_calls_primary,
+      "subagent": $api_calls_subagent,
+      "fallback": $api_calls_fallback
+    },
     "action_total": $action_total,
     "duplicate_actions": $duplicate_actions,
     "duplicate_action_rate": $duplicate_action_rate,
@@ -235,5 +243,5 @@ cat > "$SUMMARY_JSON" <<JSON
 }
 JSON
 
-echo "[SUMMARY] correlation_id=$CORRELATION_ID pass=$success fail=$failed retries=$retry_count api_calls=$api_calls error_bucket=$error_bucket log=$LOG" | tee -a "$LOG"
+echo "[SUMMARY] correlation_id=$CORRELATION_ID pass=$success fail=$failed retries=$retry_count api_calls=$api_calls primary=$api_calls_primary subagent=$api_calls_subagent fallback=$api_calls_fallback error_bucket=$error_bucket log=$LOG" | tee -a "$LOG"
 echo "[SUMMARY_JSON] $SUMMARY_JSON" | tee -a "$LOG"
