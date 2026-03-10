@@ -23,9 +23,10 @@
     "DNS_ENOTFOUND": { "retry": 0, "action": "fail-fast" },
     "BLOCKED_SPECIAL_IP": { "retry": 0, "action": "fail-fast" },
     "CONFIG": { "retry": 0, "action": "fail-fast" },
-    "NETWORK_OR_FETCH": { "retry": 1, "action": "retry-once" },
-    "TIMEOUT": { "retry": 1, "action": "retry-once" },
-    "HTTP_5XX": { "retry": 1, "action": "retry-once" }
+    "NETWORK_OR_FETCH": { "retry": 1, "action": "retry-once", "backoffSec": 1 },
+    "TIMEOUT": { "retry": 1, "action": "retry-once", "backoffSec": 2 },
+    "HTTP_5XX": { "retry": 1, "action": "retry-once", "backoffSec": 1 },
+    "HTTP_429": { "retry": 1, "action": "retry-with-retry-after", "backoffSec": 2, "respectRetryAfterHeader": true }
   },
   "qualityGate": {
     "minFetchSuccessRate": 0.9,

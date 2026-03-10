@@ -1,0 +1,344 @@
+{
+  "generated_at": "2026-03-11 02:15:13 KST",
+  "dataset": "browser-datasets-v2.json",
+  "policy": "browser-relayless-pipeline-v1.json",
+  "operational": {
+    "summary": {
+      "runs": 15,
+      "success": 13,
+      "fail": 2,
+      "success_rate": 0.8667,
+      "avg_ms": 945,
+      "retry_count": 2,
+      "retry_recovery_rate": 0.0,
+      "bucket_counts": {
+        "OK": 13,
+        "HTTP_429": 1,
+        "NETWORK_OR_FETCH": 1
+      }
+    },
+    "cases": [
+      {
+        "url": "https://docs.openclaw.ai",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 378,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://docs.openclaw.ai/llms.txt",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 318,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://github.com/openclaw/openclaw",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 905,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://github.com/openclaw/openclaw/blob/main/README.md",
+        "ok": false,
+        "status": 429,
+        "error": null,
+        "bucket": "HTTP_429",
+        "elapsed_ms": 816,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://github.com/openclaw/openclaw/issues",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 945,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/redirect/1",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 1286,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/delay/2",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 3091,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://example.org",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 377,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9110",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 301,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://www.wikipedia.org",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 718,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/get",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 1029,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/headers",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 1101,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/anything",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 1076,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://www.iana.org/domains/reserved",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 627,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://www.gnu.org/licenses/gpl-3.0.txt",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='www.gnu.org', port=443): Max retries exceeded with url: /licenses/gpl-3.0.txt (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.gnu.org'. (_ssl.c:1000)\")))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 1213,
+        "retries": 1,
+        "recovered_on_retry": false
+      }
+    ]
+  },
+  "resilience": {
+    "summary": {
+      "runs": 15,
+      "success": 2,
+      "fail": 13,
+      "success_rate": 0.1333,
+      "avg_ms": 3046,
+      "retry_count": 11,
+      "retry_recovery_rate": 0.0,
+      "bucket_counts": {
+        "DNS_ENOTFOUND": 2,
+        "NETWORK_OR_FETCH": 5,
+        "HTTP_429": 1,
+        "HTTP_5XX": 4,
+        "OK": 2,
+        "TIMEOUT": 1
+      }
+    },
+    "cases": [
+      {
+        "url": "https://nonexistent-openclaw-test-abc123.example",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='nonexistent-openclaw-test-abc123.example', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fb967d84e60>: Failed to resolve 'nonexistent-openclaw-test-abc123.example' ([Errno -2] Name or service not known)\"))",
+        "bucket": "DNS_ENOTFOUND",
+        "elapsed_ms": 208,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpstat.us/503",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='httpstat.us', port=443): Max retries exceeded with url: /503 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fb967d84fe0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 156,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpstat.us/504",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='httpstat.us', port=443): Max retries exceeded with url: /504 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fb967d86360>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 137,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/status/429",
+        "ok": false,
+        "status": 429,
+        "error": null,
+        "bucket": "HTTP_429",
+        "elapsed_ms": 2291,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/status/500",
+        "ok": false,
+        "status": 500,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 2716,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/status/502",
+        "ok": false,
+        "status": 502,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 3862,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/status/503",
+        "ok": false,
+        "status": 503,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 2838,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/status/504",
+        "ok": false,
+        "status": 504,
+        "error": null,
+        "bucket": "HTTP_5XX",
+        "elapsed_ms": 2311,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/delay/8",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 9323,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://httpbin.org/redirect/5",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 2380,
+        "retries": 0,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://10.255.255.1",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='10.255.255.1', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fb967d84140>, 'Connection to 10.255.255.1 timed out. (connect timeout=10)'))",
+        "bucket": "TIMEOUT",
+        "elapsed_ms": 19307,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://127.0.0.1",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='127.0.0.1', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fb967d4ab70>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 8,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://0.0.0.0",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='0.0.0.0', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fb967d84200>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 4,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://[::1]",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='::1', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fb967d86e40>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+        "bucket": "NETWORK_OR_FETCH",
+        "elapsed_ms": 4,
+        "retries": 1,
+        "recovered_on_retry": false
+      },
+      {
+        "url": "https://this-domain-should-not-resolve-xyz.invalid",
+        "ok": false,
+        "status": null,
+        "error": "HTTPSConnectionPool(host='this-domain-should-not-resolve-xyz.invalid', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fb967d87f50>: Failed to resolve 'this-domain-should-not-resolve-xyz.invalid' ([Errno -2] Name or service not known)\"))",
+        "bucket": "DNS_ENOTFOUND",
+        "elapsed_ms": 149,
+        "retries": 0,
+        "recovered_on_retry": false
+      }
+    ]
+  }
+}
