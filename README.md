@@ -19,6 +19,8 @@ See: [BENCHMARK.md](./BENCHMARK.md)
 
 ## Runtime Control Policy
 - API efficiency policy: `ops/api-efficiency-policy.json`
+- Engineering routine (human-readable): `ops/engineering-routine.md`
+- Engineering routine (machine profile): `ops/engineering-routine.json`
 - Heartbeat throttle rules: `HEARTBEAT.md`
 - User preference source: `USER.md`
 

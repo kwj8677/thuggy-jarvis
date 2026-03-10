@@ -1,0 +1,60 @@
+{
+  "version": "2026-03-11",
+  "owner": "yeonjin",
+  "goal": "stable-first",
+  "workflow": {
+    "stepOrder": [
+      "first-principles-analysis",
+      "single-change",
+      "smoke-3",
+      "batch-10",
+      "decision",
+      "docs-update"
+    ],
+    "singleChangeOnly": true,
+    "requireDocsSync": true
+  },
+  "guards": {
+    "maxRetry": 1,
+    "cooldownSec": 30,
+    "singleInstanceLock": true,
+    "circuitBreakConsecutiveFailures": 3,
+    "nonRetryableErrors": [
+      "Action not found",
+      "Invalid config",
+      "No such file",
+      "Unknown stage",
+      "mapping"
+    ],
+    "apiCallCap": 50,
+    "stageTimeoutSec": 180
+  },
+  "qualityGate": {
+    "minSuccessRate": 0.9,
+    "maxFallbackRate": 0.2,
+    "maxRetryRate": 0.1,
+    "requireErrorBucketNoneForHealthyRun": true
+  },
+  "reporting": {
+    "format": [
+      "double-check",
+      "conclusion",
+      "cold-counterpoint",
+      "next-action"
+    ],
+    "includeFiles": [
+      "*.log",
+      "*.summary.json"
+    ]
+  },
+  "changeControl": {
+    "requireApprovalForHighRisk": true,
+    "gatewayRestartRequiresApproval": true,
+    "restartOncePerBatch": true
+  },
+  "apiEfficiency": {
+    "avoidDuplicateCalls": true,
+    "avoidTightPolling": true,
+    "batchSimilarOperations": true
+  }
+}
