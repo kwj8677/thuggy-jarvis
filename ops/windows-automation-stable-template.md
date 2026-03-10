@@ -23,11 +23,13 @@ Build macOS-grade reliability for Windows automation using UIA-first architectur
 
 ## Hard Guardrails (API + loop safety)
 - Single-instance lock per scenario
-- Max retry: 1~2
+- Max retry: 1 (hard default)
 - Cooldown between retries (>= 30s)
-- Max run cap per batch
-- Stop on consecutive failures (circuit-break)
+- Element wait timeout: 3000ms (default)
+- Max action cap per batch: 10
+- Stop on consecutive failures (>=3, circuit-break)
 - No fan-out parallel loops for same target
+- UIA failure must be classified before fallback
 
 ## Execution Loop
 1. Run session gate
@@ -55,6 +57,38 @@ Build macOS-grade reliability for Windows automation using UIA-first architectur
 - Coordinate-only automation as default
 - Multi-skill parallel write actions on same app
 - Success decision without evidence
+
+## Limitation -> Mitigation Patterns
+
+### L1. UIA-invisible surfaces (WebView/RDP/UAC)
+- Limitation: UIA tree cannot see some surfaces.
+- Mitigation: `UIA -> OCR -> stop` (never infinite loop).
+- Rule: If UIA lookup fails within timeout, classify reason and fallback once.
+
+### L2. OCR misread / coordinate drift
+- Limitation: OCR can return wrong text/coords.
+- Mitigation: `locate -> verify -> click`.
+- Rule: For destructive actions, require one extra verification before click.
+
+### L3. Click happened, state unchanged
+- Limitation: click logs are weak signals.
+- Mitigation: action must be followed by explicit state assertion.
+- Rule: Without state transition proof, mark as failed.
+
+### L4. Runaway retries / API burst
+- Limitation: retries can explode usage.
+- Mitigation: bounded retry budget + cooldown + circuit-break.
+- Rule: stop after retry budget is exhausted.
+
+### L5. Environment drift (UAC/session/display/profile)
+- Limitation: same script behaves differently across sessions.
+- Mitigation: strict pre-gate and fixed profile/session assumptions.
+- Rule: do not execute write actions until session gate passes.
+
+## Two-Phase Execution Pattern (recommended)
+1. **Read phase**: snapshot + element discovery only.
+2. **Write phase**: one write action + immediate verification.
+3. On failure: one blocker fix only, then re-test.
 
 ## Quick Start
 ```bash
