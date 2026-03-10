@@ -50,6 +50,7 @@ for ((i=1; i<=RUNS; i++)); do
     attempt=$((attempt+1))
     total_attempts=$((total_attempts+1))
     echo "[RUN $i] attempt=$attempt" | tee -a "$LOG"
+    echo "[ACTION] run_stage stage=$STAGE run=$i attempt=$attempt" | tee -a "$LOG"
 
     if [[ "$DRY_RUN" == "1" ]]; then
       echo "[DRY_RUN] bash $RUN_STAGE $STAGE" | tee -a "$LOG"
@@ -96,6 +97,7 @@ for ((i=1; i<=RUNS; i++)); do
     success=$((success+1))
     consecutive_failures=0
     echo "[RUN $i] PASS" | tee -a "$LOG"
+    echo "[STATE_CHANGE] run=$i state=PASS" | tee -a "$LOG"
   else
     failed=$((failed+1))
     consecutive_failures=$((consecutive_failures+1))
