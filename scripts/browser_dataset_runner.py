@@ -44,7 +44,7 @@ def fetch_once(url, timeout_sec=10):
     return ok, status, (str(err) if err else None), bucket, elapsed_ms, retry_after
 
 
-def run_url(url, policy):
+def run_url(url, policy, api_role):
     ok, st, er, b, ms, retry_after = fetch_once(url)
     retries = 0
     recovered = False
@@ -67,6 +67,7 @@ def run_url(url, policy):
             ms += ms2
             recovered = ok2
 
+    api_calls_total = 1 + retries
     return {
         "url": url,
         "ok": ok,
@@ -76,6 +77,8 @@ def run_url(url, policy):
         "elapsed_ms": ms,
         "retries": retries,
         "recovered_on_retry": recovered,
+        "api_role": api_role,
+        "api_calls_total": api_calls_total
     }
 
 
@@ -86,6 +89,11 @@ def summarize(rows):
     retries = sum(r["retries"] for r in rows)
     recoveries = sum(1 for r in rows if r["recovered_on_retry"])
     c = Counter(r["bucket"] for r in rows)
+    api_total = sum(r.get("api_calls_total", 0) for r in rows)
+    role_counts = {"primary": 0, "subagent": 0, "fallback": 0}
+    for r in rows:
+        role = r.get("api_role", "primary")
+        role_counts[role] = role_counts.get(role, 0) + r.get("api_calls_total", 0)
     return {
         "runs": n,
         "success": success,
@@ -95,6 +103,8 @@ def summarize(rows):
         "retry_count": retries,
         "retry_recovery_rate": round(recoveries / retries, 4) if retries else 0,
         "bucket_counts": dict(c),
+        "api_calls_total": api_total,
+        "api_calls_breakdown": role_counts
     }
 
 
@@ -103,19 +113,21 @@ def main():
     ap.add_argument("--dataset", default="/home/humil/.openclaw/workspace/ops/browser-datasets-v2.json")
     ap.add_argument("--policy", default="/home/humil/.openclaw/workspace/ops/browser-relayless-pipeline-v1.json")
     ap.add_argument("--outPrefix", default="/home/humil/.openclaw/workspace/reports/browser-dataset-split-test-v2_1")
+    ap.add_argument("--apiRole", default="primary", choices=["primary", "subagent", "fallback"])
     args = ap.parse_args()
 
     ds = json.loads(Path(args.dataset).read_text())
     pl = json.loads(Path(args.policy).read_text())
     policy = pl.get("errorPolicy", {})
 
-    op_rows = [run_url(u, policy) for u in ds["datasets"]["operational"]]
-    re_rows = [run_url(u, policy) for u in ds["datasets"]["resilience"]]
+    op_rows = [run_url(u, policy, args.apiRole) for u in ds["datasets"]["operational"]]
+    re_rows = [run_url(u, policy, args.apiRole) for u in ds["datasets"]["resilience"]]
 
     out = {
         "generated_at": time.strftime("%Y-%m-%d %H:%M:%S KST", time.localtime()),
         "dataset": Path(args.dataset).name,
         "policy": Path(args.policy).name,
+        "api_role": args.apiRole,
         "operational": {"summary": summarize(op_rows), "cases": op_rows},
         "resilience": {"summary": summarize(re_rows), "cases": re_rows},
     }
@@ -141,6 +153,8 @@ def main():
         md.append(f"- retry_count: {s['retry_count']}")
         md.append(f"- retry_recovery_rate: {s['retry_recovery_rate']*100:.2f}%")
         md.append(f"- avg_ms: {s['avg_ms']}")
+        md.append(f"- api_calls_total: {s['api_calls_total']}")
+        md.append(f"- api_calls_breakdown: {s['api_calls_breakdown']}")
         md.append(f"- buckets: {s['bucket_counts']}")
 
     out_md.write_text("\n".join(md) + "\n")
