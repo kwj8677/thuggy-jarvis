@@ -6,13 +6,48 @@ set -euo pipefail
 
 STAGE="${1:-L3}"
 RUNS="${RUNS:-10}"
+
+# Optional profile-driven config (env overrides profile)
+PROFILE_JSON="${PROFILE_JSON:-/home/humil/.openclaw/workspace/ops/instant-exec-prompt.json}"
+
+MAX_RETRY="${MAX_RETRY:-}"
+COOLDOWN_SEC="${COOLDOWN_SEC:-}"
+DRY_RUN="${DRY_RUN:-1}"                 # 1=dry-run, 0=execute
+CIRCUIT_BREAK_FAILS="${CIRCUIT_BREAK_FAILS:-}"
+STAGE_TIMEOUT_SEC="${STAGE_TIMEOUT_SEC:-}"
+API_CALL_CAP="${API_CALL_CAP:-}"
+API_CALL_REGEX="${API_CALL_REGEX:-\[API_CALL\]|openrouter\.ai|api\.openai\.com|generativelanguage\.googleapis\.com}"
+
+if [[ -f "$PROFILE_JSON" ]]; then
+  read_profile() {
+    python3 - <<'PY' "$PROFILE_JSON" "$1"
+import json,sys
+p,key=sys.argv[1],sys.argv[2]
+obj=json.load(open(p))
+cur=obj
+for part in key.split('.'):
+    if isinstance(cur,dict) and part in cur:
+        cur=cur[part]
+    else:
+        cur=''
+        break
+print(cur if cur is not None else '')
+PY
+  }
+
+  [[ -z "$MAX_RETRY" ]] && MAX_RETRY="$(read_profile guards.maxRetry)"
+  [[ -z "$COOLDOWN_SEC" ]] && COOLDOWN_SEC="$(read_profile guards.cooldownSec)"
+  [[ -z "$CIRCUIT_BREAK_FAILS" ]] && CIRCUIT_BREAK_FAILS="$(read_profile guards.circuitBreakConsecutiveFailures)"
+  [[ -z "$STAGE_TIMEOUT_SEC" ]] && STAGE_TIMEOUT_SEC="$(read_profile guards.stageTimeoutSec)"
+  [[ -z "$API_CALL_CAP" ]] && API_CALL_CAP="$(read_profile guards.apiCallCap)"
+fi
+
+# hard defaults
 MAX_RETRY="${MAX_RETRY:-1}"
 COOLDOWN_SEC="${COOLDOWN_SEC:-30}"
-DRY_RUN="${DRY_RUN:-1}"                 # 1=dry-run, 0=execute
 CIRCUIT_BREAK_FAILS="${CIRCUIT_BREAK_FAILS:-3}"
 STAGE_TIMEOUT_SEC="${STAGE_TIMEOUT_SEC:-180}"
 API_CALL_CAP="${API_CALL_CAP:-50}"
-API_CALL_REGEX="${API_CALL_REGEX:-\[API_CALL\]|openrouter\.ai|api\.openai\.com|generativelanguage\.googleapis\.com}"
 
 WORKSPACE="/home/humil/.openclaw/workspace"
 RUN_STAGE="$WORKSPACE/skills/windows-uia-ops/scripts/run_stage.sh"
