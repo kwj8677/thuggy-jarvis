@@ -1,0 +1,48 @@
+{
+  "version": "2026-03-11",
+  "datasets": {
+    "operational": [
+      "https://docs.openclaw.ai",
+      "https://docs.openclaw.ai/llms.txt",
+      "https://github.com/openclaw/openclaw",
+      "https://github.com/openclaw/openclaw/blob/main/README.md",
+      "https://github.com/openclaw/openclaw/issues",
+      "https://httpbin.org/redirect/1",
+      "https://httpbin.org/delay/2",
+      "https://example.org",
+      "https://www.rfc-editor.org/rfc/rfc9110",
+      "https://www.wikipedia.org",
+      "https://httpbin.org/get",
+      "https://httpbin.org/headers",
+      "https://httpbin.org/anything",
+      "https://www.iana.org/domains/reserved",
+      "https://www.gnu.org/licenses/gpl-3.0.txt"
+    ],
+    "resilience": [
+      "https://nonexistent-openclaw-test-abc123.example",
+      "https://httpstat.us/503",
+      "https://httpstat.us/504",
+      "https://httpbin.org/status/429",
+      "https://httpbin.org/status/500",
+      "https://httpbin.org/status/502",
+      "https://httpbin.org/status/503",
+      "https://httpbin.org/status/504",
+      "https://httpbin.org/delay/8",
+      "https://httpbin.org/redirect/5",
+      "https://10.255.255.1",
+      "https://127.0.0.1",
+      "https://0.0.0.0",
+      "https://[::1]",
+      "https://this-domain-should-not-resolve-xyz.invalid"
+    ]
+  },
+  "evaluation": {
+    "operational": {
+      "targetSuccessRate": 0.9
+    },
+    "resilience": {
+      "targetErrorBucketCoverage": 0.9,
+      "targetNoRunawayLoop": true
+    }
+  }
+}
