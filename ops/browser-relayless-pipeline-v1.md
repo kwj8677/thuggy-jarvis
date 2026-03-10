@@ -23,6 +23,19 @@ Relay 없이도 안정적으로 검색/서핑/수집/요약을 수행하는 브�
 - no tight polling
 - fail-fast on malformed/empty content
 
+## Dataset split (required)
+- Operational dataset: normal/production-like URLs only
+- Resilience dataset: failure-inducing URLs for bucket verification
+- Source file: `ops/browser-datasets-v1.json`
+
+## Error-bucket policy
+- `DNS_ENOTFOUND`: retry 0 (fail-fast)
+- `BLOCKED_SPECIAL_IP`: retry 0 (fail-fast)
+- `CONFIG`: retry 0 (fail-fast)
+- `NETWORK_OR_FETCH`: retry 1
+- `TIMEOUT`: retry 1
+- `HTTP_5XX`: retry 1
+
 ## Success criteria
 - fetch success rate >= 90%
 - no duplicate fetch loops

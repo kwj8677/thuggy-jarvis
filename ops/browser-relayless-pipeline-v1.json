@@ -6,6 +6,8 @@
     "normalize-query",
     "discover-sources",
     "fetch-top-n",
+    "error-bucket-classification",
+    "conditional-retry",
     "evidence-check",
     "summarize",
     "save-report"
@@ -16,6 +18,14 @@
     "avoidTightPolling": true,
     "singleChangePerCycle": true,
     "failFastOnEmptyContent": true
+  },
+  "errorPolicy": {
+    "DNS_ENOTFOUND": { "retry": 0, "action": "fail-fast" },
+    "BLOCKED_SPECIAL_IP": { "retry": 0, "action": "fail-fast" },
+    "CONFIG": { "retry": 0, "action": "fail-fast" },
+    "NETWORK_OR_FETCH": { "retry": 1, "action": "retry-once" },
+    "TIMEOUT": { "retry": 1, "action": "retry-once" },
+    "HTTP_5XX": { "retry": 1, "action": "retry-once" }
   },
   "qualityGate": {
     "minFetchSuccessRate": 0.9,
