@@ -11,6 +11,16 @@
       "decision",
       "docs-update"
     ],
+    "updateRoutine": [
+      "collect-references",
+      "github-related-sources",
+      "comparative-meta-analysis",
+      "smoke-3-and-batch-10",
+      "apply-change",
+      "sync-md-json",
+      "commit-and-push",
+      "report-fixed-format"
+    ],
     "singleChangeOnly": true,
     "requireDocsSync": true
   },
@@ -56,5 +66,13 @@
     "avoidDuplicateCalls": true,
     "avoidTightPolling": true,
     "batchSimilarOperations": true
+  },
+  "vibeCodingSafety": {
+    "singleChangePerCycle": true,
+    "verifyByReproducibility": true,
+    "fixedGuardsRequired": true,
+    "stateBasedSuccessRequired": true,
+    "mdJsonSyncRequired": true,
+    "fixedReportFormatRequired": true
   }
 }

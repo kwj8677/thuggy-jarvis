@@ -17,6 +17,24 @@
 5. **기준 통과 시만 반영**
 6. **문서(md/json) 동시 업데이트**
 
+## Update routine (fixed)
+1. 레퍼런스 수집
+2. GitHub 참고자료 확인
+3. 비교/메타인지 분석
+4. 3회 스모크 -> 10회 배치
+5. 적용
+6. md/json 동시 업데이트
+7. GitHub 커밋/푸시
+8. 보고(더블체크->결론->반론->다음 액션)
+
+## Vibe coding safety principles
+1. 작은 변경 1개씩 (원인 추적 가능성 유지)
+2. 바로 검증 3회->10회 (감이 아니라 재현율로 판단)
+3. 가드 고정 (maxRetry/cooldown/circuit-break)
+4. 상태기반 성공판정 (실행됨 != 변화됨)
+5. md + json 동시 관리 (원칙/파라미터 분리)
+6. 보고 포맷 고정 (판단 오차 최소화)
+
 ## Guardrails
 - `maxRetry=1`
 - `cooldownSec>=30`
