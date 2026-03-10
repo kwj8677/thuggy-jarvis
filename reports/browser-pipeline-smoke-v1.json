@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-03-11 01:26 KST",
+  "pipeline": "browser-relayless-v1",
+  "smoke_runs": 3,
+  "success": 2,
+  "fail": 1,
+  "success_rate": 0.6667,
+  "cases": [
+    {"url": "https://docs.openclaw.ai", "status": "ok"},
+    {"url": "https://github.com/openclaw/openclaw", "status": "ok"},
+    {"url": "https://example.com", "status": "failed"}
+  ],
+  "conclusion": "스모크는 부분 성공(2/3). 네트워크/도메인 fetch 실패 케이스 1건 존재."
+}

@@ -1,0 +1,25 @@
+{
+  "version": "2026-03-11",
+  "mode": "relayless",
+  "goal": "stable-browsering",
+  "flow": [
+    "normalize-query",
+    "discover-sources",
+    "fetch-top-n",
+    "evidence-check",
+    "summarize",
+    "save-report"
+  ],
+  "guards": {
+    "maxRetry": 1,
+    "cooldownSec": 30,
+    "avoidTightPolling": true,
+    "singleChangePerCycle": true,
+    "failFastOnEmptyContent": true
+  },
+  "qualityGate": {
+    "minFetchSuccessRate": 0.9,
+    "requireCitations": true,
+    "requireConclusion": true
+  }
+}
