@@ -16,3 +16,10 @@ See: [BENCHMARK.md](./BENCHMARK.md)
 ./scripts/memory_benchmark.py
 ./scripts/memory_autotune_guard.py
 ```
+
+## Runtime Control Policy
+- API efficiency policy: `ops/api-efficiency-policy.json`
+- Heartbeat throttle rules: `HEARTBEAT.md`
+- User preference source: `USER.md`
+
+Use these as the control baseline before making model/config changes.
