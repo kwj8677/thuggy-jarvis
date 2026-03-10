@@ -18,6 +18,7 @@ UPDATE_MASTER="$WORKSPACE/skills/windows-uia-ops/scripts/update_master.sh"
 OUTDIR="$WORKSPACE/reports/uia-batch"
 mkdir -p "$OUTDIR"
 TS="$(date +%Y%m%d-%H%M%S)"
+CORRELATION_ID="uia-${STAGE}-${TS}-$RANDOM"
 LOG="$OUTDIR/${TS}-${STAGE}.log"
 SUMMARY_JSON="$OUTDIR/${TS}-${STAGE}.summary.json"
 
@@ -29,7 +30,7 @@ fi
 trap 'rm -f "$lockfile"' EXIT
 : > "$lockfile"
 
-echo "[INFO] stage=$STAGE runs=$RUNS max_retry=$MAX_RETRY cooldown=$COOLDOWN_SEC dry_run=$DRY_RUN" | tee -a "$LOG"
+echo "[INFO] correlation_id=$CORRELATION_ID stage=$STAGE runs=$RUNS max_retry=$MAX_RETRY cooldown=$COOLDOWN_SEC dry_run=$DRY_RUN" | tee -a "$LOG"
 
 success=0
 failed=0
@@ -108,6 +109,16 @@ fi
 # --- Meta analysis (best-effort, log-driven) ---
 api_calls=$(grep -Eic "$API_CALL_REGEX" "$LOG" || true)
 
+# Error bucket (first match wins)
+error_bucket="NONE"
+if grep -Eiq "Action not found|Invalid config|No such file|Unknown stage|mapping" "$LOG"; then
+  error_bucket="CONFIG"
+elif grep -Eiq "timed out|Timeout|timeout" "$LOG"; then
+  error_bucket="TRANSIENT_TIMEOUT"
+elif grep -Eiq "element not found|not found" "$LOG"; then
+  error_bucket="TARGET_UI"
+fi
+
 # If stage logs include [ACTION] lines, count adjacent duplicates.
 # Example expected format: [ACTION] click #SaveButton
 duplicate_actions=$(awk '
@@ -146,6 +157,7 @@ fi
 
 cat > "$SUMMARY_JSON" <<JSON
 {
+  "correlation_id": "$CORRELATION_ID",
   "stage": "$STAGE",
   "runs_requested": $RUNS,
   "runs_executed": $((success+failed)),
@@ -155,6 +167,7 @@ cat > "$SUMMARY_JSON" <<JSON
   "retry_count": $retry_count,
   "circuit_break_triggered": $circuit_break_triggered,
   "meta": {
+    "error_bucket": "$error_bucket",
     "api_calls_detected": $api_calls,
     "action_total": $action_total,
     "duplicate_actions": $duplicate_actions,
@@ -167,5 +180,5 @@ cat > "$SUMMARY_JSON" <<JSON
 }
 JSON
 
-echo "[SUMMARY] pass=$success fail=$failed retries=$retry_count api_calls=$api_calls log=$LOG" | tee -a "$LOG"
+echo "[SUMMARY] correlation_id=$CORRELATION_ID pass=$success fail=$failed retries=$retry_count api_calls=$api_calls error_bucket=$error_bucket log=$LOG" | tee -a "$LOG"
 echo "[SUMMARY_JSON] $SUMMARY_JSON" | tee -a "$LOG"
