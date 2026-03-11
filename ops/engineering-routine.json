@@ -64,7 +64,24 @@
   },
   "weeklyMaintenance": {
     "checkProfileDrivenRunBaseline": true,
-    "checkRoleBasedApiCountTrend": true
+    "checkRoleBasedApiCountTrend": true,
+    "checkReferenceTriage": true
+  },
+  "referenceTriage": {
+    "apply": [
+      "polly-retry-fallback-circuit-pattern",
+      "playwright-flaky-retry-concepts",
+      "sre-runbook-discipline"
+    ],
+    "hold": [
+      "full-opentelemetry-integration",
+      "multi-browser-expansion-beyond-baseline"
+    ],
+    "observe": [
+      "retry-recovery-rate-429",
+      "operational-resilience-score-drift",
+      "role-based-api-count-trend"
+    ]
   },
   "verificationStatus": {
     "profileDrivenExecution": "verified",

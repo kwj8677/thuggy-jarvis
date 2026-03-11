@@ -71,3 +71,19 @@
 - Retry/wait patterns: `FlaUI/FlaUI/wiki/Retry`, `pywinauto/timings.py`
 - Circuit-break patterns: `App-vNext/Polly`, `App-vNext/Polly-Samples`
 - Trace/log correlation: `opentelemetry-dotnet/docs/logs/correlation`
+
+## Action classification (apply / hold / observe)
+
+### Apply now
+- Polly + Polly-Samples retry/fallback/circuit composition
+- Playwright retry/flaky handling references (concept level)
+- SRE checklist items directly tied to runbook discipline
+
+### Hold (later)
+- Full OpenTelemetry distributed trace integration
+- Multi-browser expansion beyond Chrome/Edge baseline
+
+### Observe (weekly)
+- 429 retry-recovery trend
+- operational_score / resilience_score drift
+- role-based API count trend (primary/subagent/fallback)

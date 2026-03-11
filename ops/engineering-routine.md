@@ -67,6 +67,12 @@
 - 불필요 단계/중복 호출 제거
 - profile-driven run(L3/L4/L5) 기준선 점검
 - role-based API count(primary/subagent/fallback) 추세 확인
+- reference triage review (apply / hold / observe)
+
+## Reference triage policy
+- Apply: 현재 파이프라인에 즉시 반영 가능한 저위험/고효용 패턴
+- Hold: 고위험 또는 구조변경이 필요한 항목 (보류 목록 유지)
+- Observe: 추세 관측 후 채택 여부 결정 (주간/월간 지표 기반)
 
 ## Current status (verified)
 - Profile-driven execution: VERIFIED (L3/L4/L5 smoke runs passed)
