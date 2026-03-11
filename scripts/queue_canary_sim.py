@@ -19,7 +19,7 @@ def percentile(data, p):
     return data[f] + (data[c] - data[f]) * (k - f)
 
 
-def simulate(seed=42, n=200, dedupe_ttl_sec=600, ingress_min_gap_sec=0):
+def simulate(seed=42, n=200, dedupe_ttl_sec=600, ingress_min_gap_sec=0, dedupe_use_time_bucket=True):
     random.seed(seed)
     now = int(time.time())
     queue = deque()
@@ -28,9 +28,11 @@ def simulate(seed=42, n=200, dedupe_ttl_sec=600, ingress_min_gap_sec=0):
     enqueue_ts = {}
 
     def key(m):
-        bucket = (m['ts'] // 30)
         norm = m['text'].strip().lower()
-        return (m['chat_id'], m['sender_id'], norm, bucket)
+        if dedupe_use_time_bucket:
+            bucket = (m['ts'] // 30)
+            return (m['chat_id'], m['sender_id'], norm, bucket)
+        return (m['chat_id'], m['sender_id'], norm)
 
     # generate bursty traffic
     msgs = []
@@ -94,8 +96,9 @@ def simulate(seed=42, n=200, dedupe_ttl_sec=600, ingress_min_gap_sec=0):
 
 
 def main():
-    baseline = simulate(ingress_min_gap_sec=0)
-    shaped = simulate(ingress_min_gap_sec=1)
+    baseline = simulate(ingress_min_gap_sec=0, dedupe_use_time_bucket=True)
+    shaped = simulate(ingress_min_gap_sec=1, dedupe_use_time_bucket=True)
+    shaped_tuned = simulate(ingress_min_gap_sec=1, dedupe_use_time_bucket=False)
 
     base = Path('/home/humil/.openclaw/workspace/reports')
     out_json = base / 'queue-canary-sim-v1.json'
@@ -103,7 +106,8 @@ def main():
     payload = {
         'generated_at': time.strftime('%Y-%m-%d %H:%M:%S KST'),
         'baseline': baseline,
-        'ingress_shaped_gap_1s': shaped
+        'ingress_shaped_gap_1s': shaped,
+        'ingress_shaped_gap_1s_tuned_dedupe_no_bucket': shaped_tuned
     }
     out_json.write_text(json.dumps(payload, indent=2, ensure_ascii=False))
 
@@ -120,9 +124,16 @@ def main():
         f"- queue_wait_ms_p95: {shaped['queue_wait_ms_p95']}",
         f"- out_of_order_rate: {shaped['out_of_order_rate']}",
         '',
+        '## Ingress shaped + tuned dedupe (no time bucket)',
+        f"- duplicate_delivery_rate: {shaped_tuned['duplicate_delivery_rate']}",
+        f"- queue_wait_ms_p95: {shaped_tuned['queue_wait_ms_p95']}",
+        f"- out_of_order_rate: {shaped_tuned['out_of_order_rate']}",
+        '',
         '## Quick read',
-        f"- p95 delta: {shaped['queue_wait_ms_p95'] - baseline['queue_wait_ms_p95']} ms",
-        f"- duplicate rate delta: {round(shaped['duplicate_delivery_rate'] - baseline['duplicate_delivery_rate'],4)}"
+        f"- p95 delta (shaped-baseline): {shaped['queue_wait_ms_p95'] - baseline['queue_wait_ms_p95']} ms",
+        f"- duplicate delta (shaped-baseline): {round(shaped['duplicate_delivery_rate'] - baseline['duplicate_delivery_rate'],4)}",
+        f"- p95 delta (tuned-baseline): {shaped_tuned['queue_wait_ms_p95'] - baseline['queue_wait_ms_p95']} ms",
+        f"- duplicate delta (tuned-baseline): {round(shaped_tuned['duplicate_delivery_rate'] - baseline['duplicate_delivery_rate'],4)}"
     ]
     out_md.write_text('\n'.join(md) + '\n')
     print(out_json)
