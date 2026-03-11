@@ -93,6 +93,10 @@ for ((i=1; i<=RUNS; i++)); do
       break
     else
       ATTEMPT_LOG="$(mktemp)"
+      # Provide default selector hint for write stages unless caller overrides.
+      if [[ -z "${SELECTOR_HINT:-}" ]] && [[ "$STAGE" =~ ^(L3|l3|L4|l4|L5|l5)$ ]]; then
+        export SELECTOR_HINT="automationid:default_write_guard"
+      fi
       set +e
       timeout "${STAGE_TIMEOUT_SEC}s" bash "$RUN_STAGE" "$STAGE" > "$ATTEMPT_LOG" 2>&1
       rc=$?

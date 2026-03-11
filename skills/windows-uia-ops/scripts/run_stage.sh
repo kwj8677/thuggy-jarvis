@@ -10,6 +10,17 @@ fi
 source /home/humil/.openclaw/workspace/skills/windows-uia-ops/scripts/selector_guard.sh
 selector_guard_check "$stage" || exit $?
 
+# Enforce selector hint presence on write stages (L3/L4/L5)
+REQUIRE_SELECTOR_HINT="${REQUIRE_SELECTOR_HINT:-1}"
+if [[ "$REQUIRE_SELECTOR_HINT" == "1" ]]; then
+  if [[ "$stage" =~ ^(L3|l3|L4|l4|L5|l5|settings_l3_pipeline_uia\.ps1|chrome_uia_pipeline\.ps1|relay_uia_pipeline\.ps1)$ ]]; then
+    if [[ -z "${SELECTOR_HINT:-}" ]]; then
+      echo "[FATAL_SELECTOR] SELECTOR_HINT is required for write stages: $stage"
+      exit 5
+    fi
+  fi
+fi
+
 # Stage alias mapping (stable defaults)
 case "$stage" in
   L1|l1) action="win_gui_l1_pipeline_uia.ps1" ;;
