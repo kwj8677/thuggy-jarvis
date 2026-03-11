@@ -1,0 +1,34 @@
+{
+  "operational": {
+    "v2_2": {
+      "success_rate": 0.8667,
+      "retry_count": 2,
+      "retry_recovery_rate": 0.0,
+      "api_calls_total": 17,
+      "avg_ms": 1280
+    },
+    "v2_3": {
+      "success_rate": 0.8667,
+      "retry_count": 1,
+      "retry_recovery_rate": 0.0,
+      "api_calls_total": 16,
+      "avg_ms": 1011
+    }
+  },
+  "resilience": {
+    "v2_2": {
+      "success_rate": 0.1333,
+      "retry_count": 11,
+      "retry_recovery_rate": 0.0,
+      "api_calls_total": 26,
+      "avg_ms": 2805
+    },
+    "v2_3": {
+      "success_rate": 0.1333,
+      "retry_count": 11,
+      "retry_recovery_rate": 0.0,
+      "api_calls_total": 26,
+      "avg_ms": 2891
+    }
+  }
+}
