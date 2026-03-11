@@ -40,6 +40,32 @@
   - out_of_order_rate: 0.0
 - interpretation: 중복 전달률은 낮지만 p95 대기시간은 여전히 길어, 큐 처리량/우선순위 정책 추가 검토 필요
 
+## Reference triage (apply / hold / observe)
+
+### Apply
+- OpenClaw PR #5219 (queue visibility + concurrent processing)
+- OpenClaw issue #30604 (TTL dedupe cache idea)
+- Idempotent consumer patterns (Kafka/RabbitMQ)
+
+### Hold
+- Full token-bucket ingress shaping at gateway layer (needs broader impact check)
+- Priority interrupt lane for all channels (risk of ordering side effects)
+
+### Observe
+- OpenClaw queued duplicate issues (#34041/#34039) resolution status
+- Queue order anomaly issue (#9278) updates
+- queue_wait_ms_p95 trend vs duplicate_delivery_rate
+
+## Reference links
+- https://github.com/openclaw/openclaw/pull/5219
+- https://github.com/openclaw/openclaw/issues/30604
+- https://github.com/openclaw/openclaw/issues/34041
+- https://github.com/openclaw/openclaw/issues/34039
+- https://github.com/openclaw/openclaw/issues/9278
+- https://github.com/lydtechconsulting/kafka-idempotent-consumer
+- https://github.com/fencyio/fency
+- https://github.com/bbeck/token-bucket
+
 ## Report format
 1. 더블체크
 2. 결론

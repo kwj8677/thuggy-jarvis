@@ -31,5 +31,31 @@
   "passCriteria": {
     "duplicateDeliveryRateMax": 0.01,
     "requireNoRunawayLoop": true
-  }
+  },
+  "referenceTriage": {
+    "apply": [
+      "openclaw-pr-5219",
+      "openclaw-issue-30604-ttl-dedupe",
+      "idempotent-consumer-pattern"
+    ],
+    "hold": [
+      "full-token-bucket-ingress-shaping",
+      "global-priority-interrupt-lane"
+    ],
+    "observe": [
+      "openclaw-issue-34041-34039-queued-duplicates",
+      "openclaw-issue-9278-ordering",
+      "queue_wait_p95_vs_duplicate_rate"
+    ]
+  },
+  "references": [
+    "https://github.com/openclaw/openclaw/pull/5219",
+    "https://github.com/openclaw/openclaw/issues/30604",
+    "https://github.com/openclaw/openclaw/issues/34041",
+    "https://github.com/openclaw/openclaw/issues/34039",
+    "https://github.com/openclaw/openclaw/issues/9278",
+    "https://github.com/lydtechconsulting/kafka-idempotent-consumer",
+    "https://github.com/fencyio/fency",
+    "https://github.com/bbeck/token-bucket"
+  ]
 }
