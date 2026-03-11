@@ -26,7 +26,8 @@ Relay 없이도 안정적으로 검색/서핑/수집/요약을 수행하는 브�
 ## Dataset split (required)
 - Operational dataset: normal/production-like URLs only
 - Resilience dataset: failure-inducing URLs for bucket verification
-- Source file: `ops/browser-datasets-v1.json`
+- Baseline source file (current): `ops/browser-datasets-v2_4.json`
+- Legacy source files: `ops/browser-datasets-v1.json`, `ops/browser-datasets-v2.json`
 
 ## Error-bucket policy
 - `DNS_ENOTFOUND`: retry 0 (fail-fast)
