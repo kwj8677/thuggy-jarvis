@@ -201,6 +201,12 @@ ws=$wasted_steps
 print(round(ws/at,4) if at else 0)
 PY
 )
+  state_delta_rate=$(python3 - <<PY
+at=$action_total
+sc=$state_changes
+print(round(sc/at,4) if at else 0)
+PY
+)
   duplicate_action_rate=$(python3 - <<PY
 at=$action_total
 da=$duplicate_actions
@@ -210,6 +216,7 @@ PY
 else
   wasted_steps=0
   wasted_step_rate=0
+  state_delta_rate=0
   duplicate_action_rate=0
 fi
 
@@ -236,6 +243,7 @@ cat > "$SUMMARY_JSON" <<JSON
     "duplicate_actions": $duplicate_actions,
     "duplicate_action_rate": $duplicate_action_rate,
     "state_changes": $state_changes,
+    "state_delta_rate": $state_delta_rate,
     "wasted_steps": $wasted_steps,
     "wasted_step_rate": $wasted_step_rate
   },

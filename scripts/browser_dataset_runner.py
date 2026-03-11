@@ -128,13 +128,29 @@ def main():
     op_rows = [run_url(u, policy, args.apiRole) for u in ds["datasets"]["operational"]]
     re_rows = [run_url(u, policy, args.apiRole) for u in ds["datasets"]["resilience"]]
 
+    op_summary = summarize(op_rows)
+    re_summary = summarize(re_rows)
+
+    # Score split
+    # operational_score: success-focused
+    operational_score = round(op_summary["success_rate"] * 100, 2)
+    # resilience_score: bucket coverage + no runaway style proxy
+    bucket_kinds = len(re_summary.get("bucket_counts", {}).keys())
+    bucket_coverage = min(bucket_kinds / 5.0, 1.0)  # target 5+ meaningful buckets
+    retry_penalty = min(re_summary.get("retry_count", 0) / max(re_summary.get("runs", 1), 1), 1.0)
+    resilience_score = round(max(0.0, (0.7 * bucket_coverage + 0.3 * (1.0 - retry_penalty))) * 100, 2)
+
     out = {
         "generated_at": time.strftime("%Y-%m-%d %H:%M:%S KST", time.localtime()),
         "dataset": Path(args.dataset).name,
         "policy": Path(args.policy).name,
         "api_role": args.apiRole,
-        "operational": {"summary": summarize(op_rows), "cases": op_rows},
-        "resilience": {"summary": summarize(re_rows), "cases": re_rows},
+        "scores": {
+            "operational_score": operational_score,
+            "resilience_score": resilience_score
+        },
+        "operational": {"summary": op_summary, "cases": op_rows},
+        "resilience": {"summary": re_summary, "cases": re_rows},
     }
 
     out_json = Path(args.outPrefix + ".json")
@@ -147,6 +163,8 @@ def main():
     md.append(f"- generated_at: {out['generated_at']}")
     md.append(f"- dataset: {out['dataset']}")
     md.append(f"- policy: {out['policy']}")
+    md.append(f"- operational_score: {out['scores']['operational_score']}")
+    md.append(f"- resilience_score: {out['scores']['resilience_score']}")
     for name in ["operational", "resilience"]:
         s = out[name]["summary"]
         md.append("")

@@ -6,15 +6,9 @@ if [[ -z "$stage" ]]; then
   exit 2
 fi
 
-# Runtime selector guard (stable policy)
-# Optional input contract: SELECTOR_HINT can be passed by caller.
-# Reject name-only selector for write stages.
-if [[ "${SELECTOR_HINT:-}" =~ ^name-only: ]]; then
-  if [[ "$stage" =~ ^(L3|l3|L4|l4|L5|l5|settings_l3_pipeline_uia\.ps1|chrome_uia_pipeline\.ps1|relay_uia_pipeline\.ps1)$ ]]; then
-    echo "[FATAL_SELECTOR] Name-only selector is forbidden for write stages: $stage"
-    exit 4
-  fi
-fi
+# Runtime selector guard (global policy)
+source /home/humil/.openclaw/workspace/skills/windows-uia-ops/scripts/selector_guard.sh
+selector_guard_check "$stage" || exit $?
 
 # Stage alias mapping (stable defaults)
 case "$stage" in
