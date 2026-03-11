@@ -217,11 +217,20 @@ da=$duplicate_actions
 print(round(da/at,4) if at else 0)
 PY
 )
+  state_delta_score=$(python3 - <<PY
+sdr=$state_delta_rate
+war=$wasted_step_rate
+dar=$duplicate_action_rate
+score=max(0.0,min(1.0,sdr-(0.5*war)-(0.5*dar)))
+print(round(score,4))
+PY
+)
 else
   wasted_steps=0
   wasted_step_rate=0
   state_delta_rate=0
   duplicate_action_rate=0
+  state_delta_score=0
 fi
 
 cat > "$SUMMARY_JSON" <<JSON
@@ -248,6 +257,7 @@ cat > "$SUMMARY_JSON" <<JSON
     "duplicate_action_rate": $duplicate_action_rate,
     "state_changes": $state_changes,
     "state_delta_rate": $state_delta_rate,
+    "state_delta_score": $state_delta_score,
     "wasted_steps": $wasted_steps,
     "wasted_step_rate": $wasted_step_rate
   },

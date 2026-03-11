@@ -32,6 +32,14 @@
 - queue_wait p95 improved
 - no runaway loop
 
+## Canary simulation status (v1)
+- report: `reports/queue-canary-sim-v1.json`
+- observed:
+  - duplicate_delivery_rate: 0.0291
+  - queue_wait_ms_p95: 105449
+  - out_of_order_rate: 0.0
+- interpretation: 중복 전달률은 낮지만 p95 대기시간은 여전히 길어, 큐 처리량/우선순위 정책 추가 검토 필요
+
 ## Report format
 1. 더블체크
 2. 결론

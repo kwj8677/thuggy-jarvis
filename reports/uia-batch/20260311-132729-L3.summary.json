@@ -1,0 +1,29 @@
+{
+  "correlation_id": "uia-L3-20260311-132729-1884",
+  "stage": "L3",
+  "runs_requested": 3,
+  "runs_executed": 3,
+  "pass": 3,
+  "fail": 0,
+  "total_attempts": 3,
+  "retry_count": 0,
+  "circuit_break_triggered": 0,
+  "meta": {
+    "error_bucket": "NONE",
+    "api_calls_detected": 3,
+    "api_calls_breakdown": {
+      "primary": 0,
+      "subagent": 3,
+      "fallback": 0
+    },
+    "action_total": 3,
+    "duplicate_actions": 0,
+    "duplicate_action_rate": 0.0,
+    "state_changes": 3,
+    "state_delta_rate": 1.0,
+    "state_delta_score": 1.0,
+    "wasted_steps": 0,
+    "wasted_step_rate": 0.0
+  },
+  "log": "/home/humil/.openclaw/workspace/reports/uia-batch/20260311-132729-L3.log"
+}
