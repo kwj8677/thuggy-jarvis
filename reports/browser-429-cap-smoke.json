@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-03-11 10:10:11 KST",
+  "dataset": "tmps0kxhoqt.json",
+  "policy": "browser-relayless-pipeline-v1.json",
+  "api_role": "primary",
+  "operational": {
+    "summary": {
+      "runs": 2,
+      "success": 1,
+      "fail": 1,
+      "success_rate": 0.5,
+      "avg_ms": 1263,
+      "retry_count": 1,
+      "retry_recovery_rate": 0.0,
+      "bucket_counts": {
+        "HTTP_429": 1,
+        "OK": 1
+      },
+      "api_calls_total": 3,
+      "api_calls_breakdown": {
+        "primary": 3,
+        "subagent": 0,
+        "fallback": 0
+      }
+    },
+    "cases": [
+      {
+        "url": "https://httpbin.org/status/429",
+        "ok": false,
+        "status": 429,
+        "error": null,
+        "bucket": "HTTP_429",
+        "elapsed_ms": 2257,
+        "retries": 1,
+        "recovered_on_retry": false,
+        "retry_sleep_sec": 2,
+        "api_role": "primary",
+        "api_calls_total": 2
+      },
+      {
+        "url": "https://docs.openclaw.ai",
+        "ok": true,
+        "status": 200,
+        "error": null,
+        "bucket": "OK",
+        "elapsed_ms": 270,
+        "retries": 0,
+        "recovered_on_retry": false,
+        "retry_sleep_sec": 0,
+        "api_role": "primary",
+        "api_calls_total": 1
+      }
+    ]
+  },
+  "resilience": {
+    "summary": {
+      "runs": 0,
+      "success": 0,
+      "fail": 0,
+      "success_rate": 0,
+      "avg_ms": 0,
+      "retry_count": 0,
+      "retry_recovery_rate": 0,
+      "bucket_counts": {},
+      "api_calls_total": 0,
+      "api_calls_breakdown": {
+        "primary": 0,
+        "subagent": 0,
+        "fallback": 0
+      }
+    },
+    "cases": []
+  }
+}

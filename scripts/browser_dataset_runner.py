@@ -48,6 +48,7 @@ def run_url(url, policy, api_role):
     ok, st, er, b, ms, retry_after = fetch_once(url)
     retries = 0
     recovered = False
+    retry_sleep_sec = 0
 
     if not ok:
         p = policy.get(b, {})
@@ -59,8 +60,11 @@ def run_url(url, policy, api_role):
                 try:
                     if retry_after:
                         sleep_sec = max(sleep_sec, int(retry_after))
+                        max_retry_after = int(p.get("maxRetryAfterSec", 10))
+                        sleep_sec = min(sleep_sec, max_retry_after)
                 except Exception:
                     pass
+            retry_sleep_sec = sleep_sec
             time.sleep(sleep_sec)
             ok2, st2, er2, b2, ms2, _ = fetch_once(url)
             ok, st, er, b = ok2, st2, er2, b2
@@ -77,6 +81,7 @@ def run_url(url, policy, api_role):
         "elapsed_ms": ms,
         "retries": retries,
         "recovered_on_retry": recovered,
+        "retry_sleep_sec": retry_sleep_sec,
         "api_role": api_role,
         "api_calls_total": api_calls_total
     }

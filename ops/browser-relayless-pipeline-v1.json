@@ -26,7 +26,7 @@
     "NETWORK_OR_FETCH": { "retry": 1, "action": "retry-once", "backoffSec": 1 },
     "TIMEOUT": { "retry": 1, "action": "retry-once", "backoffSec": 2 },
     "HTTP_5XX": { "retry": 1, "action": "retry-once", "backoffSec": 1 },
-    "HTTP_429": { "retry": 1, "action": "retry-with-retry-after", "backoffSec": 2, "respectRetryAfterHeader": true }
+    "HTTP_429": { "retry": 1, "action": "retry-with-retry-after", "backoffSec": 2, "respectRetryAfterHeader": true, "maxRetryAfterSec": 10 }
   },
   "qualityGate": {
     "minFetchSuccessRate": 0.9,
