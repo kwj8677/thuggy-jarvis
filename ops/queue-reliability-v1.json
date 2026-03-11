@@ -1,0 +1,35 @@
+{
+  "version": "2026-03-11",
+  "goal": "busy-queue-reliability",
+  "dedupe": {
+    "enabled": true,
+    "key": ["chat_id", "sender_id", "normalized_text", "time_bucket"],
+    "ttlMinutes": 10
+  },
+  "ordering": {
+    "mode": "fifo",
+    "priorityInterruptLane": true,
+    "priorityLaneOnlyFor": ["explicit-steer", "stop", "audit"]
+  },
+  "guards": {
+    "maxRetry": 1,
+    "cooldownSec": 30,
+    "circuitBreakConsecutiveFailures": 3,
+    "nonRetryableImmediateStop": true
+  },
+  "metrics": {
+    "duplicateDeliveryRate": true,
+    "queueWaitMsP50": true,
+    "queueWaitMsP95": true,
+    "resendRate": true,
+    "outOfOrderRate": true
+  },
+  "rollout": {
+    "mode": "shadow-then-canary",
+    "canaryPercent": 10
+  },
+  "passCriteria": {
+    "duplicateDeliveryRateMax": 0.01,
+    "requireNoRunawayLoop": true
+  }
+}
