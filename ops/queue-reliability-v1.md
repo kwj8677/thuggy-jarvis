@@ -5,7 +5,8 @@
 
 ## Core controls
 1. Dedupe TTL/Key
-- key: `chat_id + sender_id + normalized_text + time_bucket`
+- key: `chat_id + sender_id + normalized_text`
+- `time_bucket`는 중복률 회귀를 유발할 수 있어 기본 비활성화
 - ttl: 5~20 minutes
 
 2. Ordering policy
@@ -34,11 +35,12 @@
 
 ## Canary simulation status (v1)
 - report: `reports/queue-canary-sim-v1.json`
-- observed:
-  - duplicate_delivery_rate: 0.0291
-  - queue_wait_ms_p95: 105449
+- observed (latest):
+  - baseline: duplicate=0.0347 / p95=106000ms
+  - shaped(1s gap): duplicate=0.0457 / p95=39000ms
+  - shaped+tuned-dedupe(no bucket): duplicate=0.0000 / p95=26000ms
   - out_of_order_rate: 0.0
-- interpretation: 중복 전달률은 낮지만 p95 대기시간은 여전히 길어, 큐 처리량/우선순위 정책 추가 검토 필요
+- interpretation: ingress shaping 단독은 duplicate 회귀 위험이 있으나, dedupe key에서 time_bucket을 제거하면 p95와 duplicate를 동시에 개선 가능
 
 ## Reference triage (apply / hold / observe)
 

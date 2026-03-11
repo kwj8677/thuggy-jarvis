@@ -3,8 +3,9 @@
   "goal": "busy-queue-reliability",
   "dedupe": {
     "enabled": true,
-    "key": ["chat_id", "sender_id", "normalized_text", "time_bucket"],
-    "ttlMinutes": 10
+    "key": ["chat_id", "sender_id", "normalized_text"],
+    "ttlMinutes": 10,
+    "timeBucketEnabled": false
   },
   "ordering": {
     "mode": "fifo",
