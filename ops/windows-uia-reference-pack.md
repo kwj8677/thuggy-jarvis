@@ -2,15 +2,23 @@
 
 이 문서는 Windows 자동화 안정화에 직접 참고한 외부 레퍼런스를 고정해 둔 목록이다.
 
-## Core references
+## Reference tiers
+
+### Tier 1 — 운영용(즉시 적용)
 - FlaUI core: https://github.com/FlaUI/FlaUI
 - FlaUI searching patterns: https://github.com/FlaUI/FlaUI/wiki/Searching
+- FlaUI retry: https://github.com/FlaUI/FlaUI/wiki/Retry
 - FlaUInspect (UIA inspect tool): https://github.com/FlaUI/FlaUInspect
 - UIA-v2 (AHK): https://github.com/Descolada/UIA-v2
 - UIAutomation (AHK): https://github.com/Descolada/UIAutomation
 - pywinauto timings: https://github.com/vsajip/pywinauto/blob/master/pywinauto/timings.py
 - Polly resilience: https://github.com/App-vNext/Polly
+- Polly samples: https://github.com/App-vNext/Polly-Samples
+
+### Tier 2 — 심화용(고도화 때 참고)
 - OpenTelemetry log correlation (.NET): https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/docs/logs/correlation/README.md
+- Microsoft Engineering Playbook: https://github.com/microsoft/code-with-engineering-playbook
+- SRE checklist: https://github.com/bregman-arie/sre-checklist
 
 ## Extracted patterns to apply
 1. UIA-first selector hierarchy (`AutomationId` > `AutomationId+ControlType` > `Name+ControlType`)
