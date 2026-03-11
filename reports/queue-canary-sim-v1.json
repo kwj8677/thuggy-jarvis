@@ -1,12 +1,21 @@
 {
-  "generated_at": "2026-03-11 13:35:32 KST",
-  "result": {
+  "generated_at": "2026-03-11 13:47:23 KST",
+  "baseline": {
     "input_count": 200,
     "queued_count": 173,
     "dropped_dupes": 27,
     "duplicate_delivery_rate": 0.0347,
     "queue_wait_ms_p50": 49000,
-    "queue_wait_ms_p95": 106000,
+    "queue_wait_ms_p95": 107400,
+    "out_of_order_rate": 0.0
+  },
+  "ingress_shaped_gap_1s": {
+    "input_count": 200,
+    "queued_count": 176,
+    "dropped_dupes": 24,
+    "duplicate_delivery_rate": 0.0511,
+    "queue_wait_ms_p50": 17000,
+    "queue_wait_ms_p95": 40250,
     "out_of_order_rate": 0.0
   }
 }

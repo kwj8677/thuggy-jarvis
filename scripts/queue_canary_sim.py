@@ -19,7 +19,7 @@ def percentile(data, p):
     return data[f] + (data[c] - data[f]) * (k - f)
 
 
-def simulate(seed=42, n=200, dedupe_ttl_sec=600):
+def simulate(seed=42, n=200, dedupe_ttl_sec=600, ingress_min_gap_sec=0):
     random.seed(seed)
     now = int(time.time())
     queue = deque()
@@ -41,7 +41,11 @@ def simulate(seed=42, n=200, dedupe_ttl_sec=600):
         else:
             txt = f'msg-{i}'
         msgs.append({'id': i, 'chat_id': 'telegram:7032536273', 'sender_id': 'u1', 'text': txt, 'ts': t})
-        t += random.randint(0, 2)  # burst arrivals
+        # optional ingress shaping: enforce minimum inter-arrival gap
+        step = random.randint(0, 2)
+        if ingress_min_gap_sec > step:
+            step = ingress_min_gap_sec
+        t += step
 
     dropped_dupes = 0
     for m in msgs:
@@ -90,27 +94,40 @@ def simulate(seed=42, n=200, dedupe_ttl_sec=600):
 
 
 def main():
-    res = simulate()
+    baseline = simulate(ingress_min_gap_sec=0)
+    shaped = simulate(ingress_min_gap_sec=1)
+
     base = Path('/home/humil/.openclaw/workspace/reports')
     out_json = base / 'queue-canary-sim-v1.json'
     out_md = base / 'queue-canary-sim-v1.md'
-    out_json.write_text(json.dumps({'generated_at': time.strftime('%Y-%m-%d %H:%M:%S KST'), 'result': res}, indent=2, ensure_ascii=False))
+    payload = {
+        'generated_at': time.strftime('%Y-%m-%d %H:%M:%S KST'),
+        'baseline': baseline,
+        'ingress_shaped_gap_1s': shaped
+    }
+    out_json.write_text(json.dumps(payload, indent=2, ensure_ascii=False))
 
     md = [
         '# Queue Canary Simulation v1',
         '',
-        f"- input_count: {res['input_count']}",
-        f"- queued_count: {res['queued_count']}",
-        f"- dropped_dupes: {res['dropped_dupes']}",
-        f"- duplicate_delivery_rate: {res['duplicate_delivery_rate']}",
-        f"- queue_wait_ms_p50: {res['queue_wait_ms_p50']}",
-        f"- queue_wait_ms_p95: {res['queue_wait_ms_p95']}",
-        f"- out_of_order_rate: {res['out_of_order_rate']}"
+        '## Baseline',
+        f"- duplicate_delivery_rate: {baseline['duplicate_delivery_rate']}",
+        f"- queue_wait_ms_p95: {baseline['queue_wait_ms_p95']}",
+        f"- out_of_order_rate: {baseline['out_of_order_rate']}",
+        '',
+        '## Ingress shaped (min gap=1s)',
+        f"- duplicate_delivery_rate: {shaped['duplicate_delivery_rate']}",
+        f"- queue_wait_ms_p95: {shaped['queue_wait_ms_p95']}",
+        f"- out_of_order_rate: {shaped['out_of_order_rate']}",
+        '',
+        '## Quick read',
+        f"- p95 delta: {shaped['queue_wait_ms_p95'] - baseline['queue_wait_ms_p95']} ms",
+        f"- duplicate rate delta: {round(shaped['duplicate_delivery_rate'] - baseline['duplicate_delivery_rate'],4)}"
     ]
     out_md.write_text('\n'.join(md) + '\n')
     print(out_json)
     print(out_md)
-    print(res)
+    print(payload)
 
 
 if __name__ == '__main__':
