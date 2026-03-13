@@ -3,13 +3,15 @@
 _Learn about the person you're helping. Update this as you go._
 
 - **Name:**
+  김연진
 - **What to call them:**
+  연진
 - **Pronouns:** _(optional)_
 - **Timezone:** Asia/Seoul
 - **Notes:**
   - 로컬 시스템에 Gemini CLI 설치됨
   - 코딩 시 효율성과 안정성을 위해 필요하면 Gemini CLI를 적극 활용 선호
-  - 시스템 안정성(Stable) 최우선
+  - 운영 목표: Stable
   - 보안보다 안정성/가용성을 우선하되, 고위험 변경은 사전 확인 후 진행
   - 시스템 설정값이 민감한 경우 임의 변경 금지, 변경 전 반드시 확인
   - OpenClaw가 WSL에 설치된 환경이므로, Windows 작업은 무조건 WSL에서 `powershell.exe`(pwsh) 호출 방식으로 수행
@@ -25,7 +27,14 @@ _Learn about the person you're helping. Update this as you go._
   - 세션은 분리하되 공통 기억(MEMORY.md, memory/*.md)은 통합 활용하고, 필요 시 다른 세션 기록(sessions_history)도 자율적으로 조회해 문맥을 보완한다
   - 사용자 채팅은 단일 스레드로 유지하고, 내부적으로 작업 맥락(운영/마케팅/실험)을 자동 분류·분리하여 처리 후 통합 보고한다 (사용자에게 태그 입력 요구하지 않음)
   - 중요 이슈 답변 시 "더블체크 → 결론 → 냉정한 반론(한계/대안) → 다음 액션" 형식의 보고를 선호
+  - 작업이 끝나거나 timeout/오류가 나도 반드시 마지막에 결과 보고 라인(성공/실패/원인/다음액션)을 남길 것
   - API 호출량 낭비를 매우 싫어함: 중복 호출/반복 폴링/과도한 proactive 체크 지양, 변경은 묶어서 1회 적용 선호
+  - 운영 정책: 모든 작업의 단일 진입점은 Python runner로 통일하고, 내부 실행기는 목적별 어댑터로 분리(웹=Python+Playwright, Windows 시스템=Python에서 PowerShell 호출)
+  - 에이전트 운용 원칙: Heavy 1(메인)은 지휘/판단만, Light 4(서브)는 병렬 생성+직렬 감사로 분산 처리
+  - 웹 자동화 스택 고정: 로컬 Python+Playwright(주력) + `playwright-cli`(보조)만 사용 (`agent-browser`, `stealth-browser`는 사용 금지)
+  - 웹 실행 모드 규칙: 검색/수집/리서치는 headless 기본, UI 조작/디버깅/복잡 인터랙션은 headful 전환
+  - 권한 정책: Python 상시 관리자권한 고정 금지. 기본 일반권한 실행, 관리자권한은 고위험 작업에서만 조건부 승격(whitelist 기반)
+  - 고위험 액션 게이트: 결제/송금/외부 발송(메일·메시지) 최종 실행 전 사용자 확인 1회 필수
 
 ## Context
 

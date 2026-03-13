@@ -1,0 +1,61 @@
+{
+  "version": "2026-03-13",
+  "name": "web-search-pipeline-v1",
+  "goal": "stable-low-cost-search-and-extraction",
+  "entrypoint": "python_runner",
+  "runtime": {
+    "primary": "python+playwright",
+    "helper": ["playwright-cli"],
+    "blocked": ["agent-browser", "stealth-browser"]
+  },
+  "modes": {
+    "headless_default": true,
+    "headful_when": [
+      "ui_interaction_required",
+      "debug_or_visual_verification_required",
+      "dynamic_rendering_or_login_flow"
+    ]
+  },
+  "search_strategy": {
+    "default": { "provider": "brave", "count": 3 },
+    "naver_tasks": {
+      "provider": "naver-direct-playwright",
+      "brave_allowed": false,
+      "phase1": "headless place-link collection",
+      "phase2": "headful(debug window) reservation verification"
+    },
+    "tier2_expand_when_low_confidence": { "count": 8 },
+    "tier3_critical_or_conflict": { "count": 10, "cross_verify": true }
+  },
+  "extraction_strategy": {
+    "primary": "web_fetch_or_static_parse",
+    "fallback": "playwright_page_extract"
+  },
+  "high_risk_gate": {
+    "requires_final_user_confirmation": [
+      "payment",
+      "bank_transfer",
+      "external_send_email_or_message"
+    ]
+  },
+  "windows_debug_window": {
+    "launcher": "OpenClaw_DebugChrome_Interactive",
+    "known_failure": "session0_hidden_chrome_absorb",
+    "mitigation": [
+      "cleanup_session0_chrome",
+      "run_interactive_task_under_user_session",
+      "use_powershell_start_process_wrapper"
+    ]
+  },
+  "orchestration": {
+    "main_role": "orchestrator_only",
+    "workers_parallel": ["collector", "analyzer", "verifier_candidate"],
+    "audit_serial": "audit_worker",
+    "deterministic_gate": ["regex_prefix_check", "json_schema_check"],
+    "autorepair": { "enabled": true, "maxRegenerate": 1 }
+  },
+  "artifacts": {
+    "required": ["result_json", "error_log_on_failure"],
+    "optional": ["screenshot"]
+  }
+}
